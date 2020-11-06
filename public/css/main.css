@@ -1,0 +1,19 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    padding-top: 80px;
+    margin-bottom: 75px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin-bottom: 0;
+}
