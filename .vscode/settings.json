@@ -21,6 +21,7 @@
     },
     "typescript.referencesCodeLens.enabled": true,
     "cSpell.words": [
+        "Arial",
         "crossorigin"
     ]
 }

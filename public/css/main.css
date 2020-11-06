@@ -12,8 +12,8 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+}
 
-    p, ul {
-        margin-bottom: 0;
-    }
+footer p {
+    margin-bottom: 0;
 }
