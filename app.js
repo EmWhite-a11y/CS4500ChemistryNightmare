@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 const compression = require("compression");
 const express = require("express");
 const path = require("path");
+const uuid = require("uuid");
 
 const app = express();
 const server = require("http").createServer(app);
@@ -20,6 +21,16 @@ app.get("/", function(req, res) {
     res.render("home", {
         title: "Home"
     });
+});
+
+app.get("/play", function(req, res) {
+    if (global.room) {
+        res.json({ room: global.room });
+        global.room = null;
+    } else {
+        global.room = uuid.v4();
+        res.json({ room: global.room });
+    }
 });
 
 app.get("/game/:id", function(req, res) {
