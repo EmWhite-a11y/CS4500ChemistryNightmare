@@ -29,6 +29,12 @@ app.get("/game/:id", function(req, res) {
     });
 });
 
+app.get("/rules", function(req, res) {
+    res.render("rules", {
+        title: "How to Play",
+    });
+});
+
 server.listen(app.get("port"), function() {
     console.log("App is running at http://localhost:%d in %s mode", app.get("port"), app.get("env"));
 });

@@ -1,0 +1,51 @@
+extends layout
+
+block styles
+    link(rel="stylesheet", href="/css/rules.css")
+
+block content
+    h1 Chemistry Nightmare
+    h2 How to Play
+    p The goal of the game is to recreate the filled beaker. Click on a tool and then a beaker. Just click your way to victory!
+    p Click on the mic button to communicate to your partner.
+    p A beaker consists of four properties: volume, color, pH, and temperature.
+    p There are two players: the Researcher, who can measure the beakers, and the Chemist, who can fill an empty beaker.
+
+
+    h2 Researcher
+      h3 Tools
+      ul
+        li Ruler - Zoom into the beaker and use its markings to read the volume.
+        li Color palette - Find the closest color on the color palette that matches your beaker.
+        li pH meter - Use the pH meter to get a readout of the pH level.
+        li Thermometer - Use the thermometer to get the temperature.
+      h3 Tasks
+      p Using your tools
+      ul
+        li Figure out what properties your beaker contains.
+        li Figure out what properties the Chemist’s beaker contains.
+        li Discuss with the Chemist how they should use their tools to mimic your beaker.
+        li Fill out your lab report, and submit it and when the Chemist submits their beaker.
+
+    h2 Chemist
+      h3 Tools
+      ul
+        li Cups of red, yellow, and blue water - Add water to your beaker. Adding multiple colors will give more hues, but don’t mix all three!
+        li Acid and base cups - Adding acid lowers your pH level, and adding base gives you a higher pH. Use one to cancel the other out.
+        li Bunsen burner - Heat your beaker with the Bunsen burner...
+        li Icebox - Or cool it down with time in the icebox.
+        li Sink - When there is a mistake made on the beaker, you can remove all of the beaker’s fluid using the sink.
+      h3 Tasks
+      ul
+        li Using the Researcher’s information and your tools, mimic their beaker.
+        li Discuss with the Researcher about what your beaker contains
+        li Submit your beaker when the Researcher submits their lab report
+
+
+ 
+    button#returnHome
+      h3 Return
+
+
+block scripts
+    script(src="/js/rules.js")
