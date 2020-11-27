@@ -7,11 +7,12 @@ block content
   .text-center
     h1 Chemistry Nightmare
   .text-center
-    button#play-button
+    button#playButton
       h2 PLAY
     br
-    button#help-button
-      h2 HELP
+    button#rulesButton
+      h2 RULES
 
 block scripts
+  script(src="/socket.io/socket.io.js")
   script(src="/js/home.js")
