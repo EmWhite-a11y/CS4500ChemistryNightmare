@@ -10,6 +10,7 @@ $('#rules').on('click', function() {
 
 function findGame() {
     socket.on('found-game', game => {
+<<<<<<< HEAD
         $('#spinner').hide()
         $('#play').removeAttr('disabled');
         $('#rules').removeAttr('disabled');
@@ -19,6 +20,11 @@ function findGame() {
     $('#spinner').show()
     $('#play').attr('disabled', true);
     $('#rules').attr('disabled', true);
+=======
+        location.href = `/game/${game}`
+    })
+    socket.emit('find-game', $.cookie('player'))
+>>>>>>> develop
 }
 
 function openRules() {
