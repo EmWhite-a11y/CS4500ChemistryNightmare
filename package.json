@@ -1,38 +1,25 @@
 {
   "name": "chemistry-nightmare",
-  "version": "0.1.0",
-  "description": "A project for a class",
+  "version": "1.0.0",
+  "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npm run start:prod",
-    "start:dev": "nodemon app.js",
-    "start:prod": "node app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EmWhite-a11y/CS4500ChemistryNightmare.git"
+    "start": "node app.js",
+    "start:dev": "nodemon app.js"
   },
   "keywords": [],
-  "contributors": [
-    {
-      "name": "Jared Diehl",
-      "email": "jmddnb@umsystem.edu"
-    }
-  ],
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/EmWhite-a11y/CS4500ChemistryNightmare/issues"
-  },
-  "homepage": "https://github.com/EmWhite-a11y/CS4500ChemistryNightmare#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "compression": "^1.7.4",
+    "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "pug": "^3.0.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^3.0.3",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
-    "eslint": "^7.12.1",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "shelljs": "^0.8.4"
   }
 }
