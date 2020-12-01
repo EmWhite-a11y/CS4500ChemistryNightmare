@@ -1,19 +1,34 @@
 const DEBUG = true
 
+// Game states
 const State = {
-    UNKNOWN: 0,
-    INITIALIZED: 1,
+    WAITING: 0,
+    READY: 1,
     STARTED: 2,
-    FINISHED: 4
+    FINISHED: 3
 }
 
+// Player roles
+const Role = {
+    UNKNOWN: 0,
+    CHEMIST: 1,
+    RESEARCHER: 2
+}
+
+// Socket connections
 let clients = {}
+
+// Connected users
 let players = {}
+
+// Active games
 let games = {}
 
 // Returns a unique player identifier
 let generatePlayer = (function () {
     let count = 0
+
+    // Every time this function is called, increment count
     return function () {
         return count++
     }
@@ -22,56 +37,94 @@ let generatePlayer = (function () {
 // Returns a unique game identifier
 let generateGame = (function () {
     let count = 0
+
+    // Every time this function is called, increment count
     return function () {
         return count++
     }
 })()
 
 const routes = (app) => {
+    // Middleware to assign a user a session
     app.use((req, res, next) => {
+        let player = null
+
+        // Create a new session if one doesn't exist
         if (!req.session.player) {
-            const player = {
-                id: generatePlayer(),
-                socket: null
+            // Create a new player
+            player = {
+                id: generatePlayer(), // Player's identifier
+                socket: null // Player's socket connection
             }
+
+            // Attach the player to the session
             req.session.player = player
-            res.cookie('player', player.id)
+
+            // Cache the player for later use
             players[player.id] = player
+
+            // Store the player's identifier on the client's web browser
+            res.cookie('player', player.id)
         }
+
+        player = req.session.player
+
+        // Check if the session's player is cached
+        if (!players[player.id]) {
+            // Cache the session's player if it's missing
+            players[player.id] = player
+
+            // Store the player's identifier on the client's web browser
+            res.cookie('player', player.id)
+        }
+
+        // Move to the next handler
         next()
     })
 
+    // Handler for the home page
     app.get('/', (req, res) => {
+        // Render the home page on server
         res.render('home', {
             title: 'Home'
         })
     })
 
+    // Handler for the rules page
     app.get('/rules', (req, res) => {
+        // Render the rules page on server
         res.render('rules', {
             title: 'Rules'
         })
     })
 
+    // Handler for the game page
     app.get('/game/:id', (req, res) => {
-        const game = req.params.id
-        const player = req.session.player.id
-        const role = games[game].players[player].role
-        const template = role == 1 ? 'game/chemist' : (role == 2 ? 'game/researcher' : 'error')
+        let game = req.params.id
+        let player = req.session.player.id
+        let role = games[game].players[player].role
+        let template = role == Role.CHEMIST ? 'game/chemist' : (role == Role.RESEARCHER ? 'game/researcher' : 'error')
+        
+        // Render game page on server
         res.render(template, {
             title: 'Game'
         })
     })
 
-    app.use(errorHandler)
+    // Handler that catches anything that couldn't be handled
+    app.use(errorHandler) // TODO: doesn't seem to catch /game
 }
 
 function errorHandler(err, req, res, next) {
+    // Output the error to the terminal
     console.error(err.stack)
+
     if (res.headersSent) {
         return next(err)
     }
-    res.status(500).render('error', {
+
+    // Render the error page
+    res.status(err.status || 500).render('error', {
         title: 'Error'
     })
 }
@@ -88,11 +141,17 @@ const sockets = (io) => {
             joinGame(game, player, socket)
         })
 
-        socket.on('signal', (id, signal) => {
-            if (!clients[id]) return
-            clients[data.socket_id].emit('signal', {
+        socket.on('update-count', (game, count) => {
+            socket.to(game).emit('count-updated', count)
+            if (count == 10) io.in(game).emit('game-finished')
+        })
+
+        socket.on('signal', (data) => {
+            if (!clients[data.id]) return
+            console.log(`Sending signal from ${socket.id} to ${data.id}`)
+            clients[data.id].emit('signal', {
                 id: socket.id,
-                signal
+                signal: data.signal
             })
         })
 
@@ -102,26 +161,68 @@ const sockets = (io) => {
         })
 
         socket.on('initSend', (id) => {
+            console.log(`${socket.id} sending initSend to ${id}`)
             clients[id].emit('initSend', socket.id)
         })
     })
 }
 
 function connect(socket) {
-    log(`Client ${socket.id} connected`)
+    console.log(`Client ${socket.id} connected`)
 
     clients[socket.id] = socket
 
-    for (let client in clients) {
-        if (client === socket.id) continue
-        clients[client].emit('initReceive', socket.id)
+    for (let id in clients) {
+        if (id === socket.id) continue
+        console.log(`Sending initReceive to ${socket.id}`)
+        clients[id].emit('initReceive', socket.id)
     }
 }
 
 function disconnect(socket) {
-    log(`Client ${socket.id} disconnected`)
+    console.log(`Client ${socket.id} disconnected`)
     
     delete clients[socket.id]
+    
+    let game = findGameFromSocket(socket)
+    let player = findPlayerFromSocket(socket)
+
+    if (player !== null) {
+        log(`Player ${player} left game ${game}`)
+    }
+    if (game !== null) {
+        if (games[game].state === State.STARTED) {
+            log(`Game ${game} ending`)
+
+            for (let player in games[game].players) {
+                players[player].socket = null
+                if (games[game].players[player].socket.id === socket.id) continue
+                log(`Notifying player ${player} to leave game ${game}`)
+                games[game].players[player].socket.emit('leave-game')
+            }
+
+            log(`Deleting game ${game}`)
+            delete games[game]
+        }
+    }
+}
+
+function findGameFromSocket(socket) {
+    for (let game in games) {
+        for (let player in games[game].players) {
+            if (games[game].players[player].socket.id == socket.id) return game
+        }
+    }
+    return null
+}
+
+function findPlayerFromSocket(socket) {
+    for (let game in games) {
+        for (let player in games[game].players) {
+            if (games[game].players[player].socket.id == socket.id) return player
+        }
+    }
+    return null
 }
 
 function findGame(player, socket) {
@@ -134,10 +235,12 @@ function findGame(player, socket) {
     let game = findAvailableGame()
 
     // Determine the player's role
-    let role = 0 // 0=Other, 1=Chemist, 2=Researcher
-    if (Object.keys(games[game].players).length < 2) {
-        role = Object.keys(games[game].players).length + 1
-    }
+    let role = Role.UNKNOWN
+    let count = Object.keys(games[game].players).length
+    if (count == 0) role = Role.CHEMIST
+    else if (count == 1) role = Role.RESEARCHER
+
+    log(`Determined role ${role}`)
 
     // Have that player join that game
     games[game].players[player] = {
@@ -147,16 +250,25 @@ function findGame(player, socket) {
         socket
     }
 
+    log(`Player ${player} created and added to game ${game}`)
+    log(games[game])
+
     // Start game when we have all players
     if (canInitializeGame(game)) {
         // Flag the game as initialized
-        games[game].state = State.INITIALIZED
+        games[game].state = State.READY
+
+        log(`Game ${game} initialized`)
 
         // Notify playing players that a game was found
         for (let player in games[game].players) {
             if (!isPlayablePlayer(game, player)) continue
+            log(`Notifying player ${player} game ${game} found`)
             games[game].players[player].socket.emit('found-game', game)
         }
+    } else {
+        log(`Game ${game} not initialized yet`)
+        log(games[game])
     }
 }
 
@@ -164,7 +276,7 @@ function joinGame(game, player, socket) {
     log(`Player ${player} joining game`)
 
     // Join the game room
-    //socket.join(game)
+    socket.join(game)
 
     // Update player's socket
     players[player].socket = socket
@@ -187,28 +299,48 @@ function joinGame(game, player, socket) {
 }
 
 function findAvailableGame() {
-    // Return a game that is not yet started
+    log('Finding an available game')
+    
+    // Return a game that is not yet started, which means it's still waiting for another player
     for (let game in games) {
-        if (games[game].state == State.INITIALIZED) continue
-        return games[game].id
+        if (games[game].state === State.WAITING) return game
     }
 
-    // Return a new game
+    log('Setting up a new game')
+
+    // Set up a new game
     let game = generateGame()
     games[game] = {
         id: game,
         players: {},
-        status: State.INITIALIZING
+        state: State.WAITING
     }
+
+    log('New game created')
+    log(games[game])
+
+    // Return the new game
     return game
 }
 
 function canInitializeGame(game) {
+    log('Checking if can initialize game')
+    
     // Check that we have a chemist
-    if (!roleExists(game, 1)) return false
+    if (!roleExists(game, Role.CHEMIST)) {
+        log('Missing chemist')
+        return false
+    }
+
+    log('Chemist found')
 
     // Check that we have a researcher
-    if (!roleExists(game, 2)) return false
+    if (!roleExists(game, Role.RESEARCHER)) {
+        log('Missing researcher')
+        return false
+    }
+
+    log('Researcher found')
 
     return true
 }
@@ -231,7 +363,7 @@ function canStartGame(game) {
 
 function isPlayablePlayer(game, player) {
     let role = games[game].players[player].role
-    return role == 1 || role == 2
+    return role == Role.CHEMIST || role == Role.RESEARCHER
 }
 
 function log(str) {

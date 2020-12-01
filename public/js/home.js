@@ -10,9 +10,15 @@ $('#rules').on('click', function() {
 
 function findGame() {
     socket.on('found-game', game => {
+        $('#spinner').hide()
+        $('#play').removeAttr('disabled');
+        $('#rules').removeAttr('disabled');
         location.href = `/game/${game}`
     })
     socket.emit('find-game', $.cookie('player'))
+    $('#spinner').show()
+    $('#play').attr('disabled', true);
+    $('#rules').attr('disabled', true);
 }
 
 function openRules() {
