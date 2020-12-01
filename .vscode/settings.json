@@ -22,6 +22,7 @@
     "typescript.referencesCodeLens.enabled": true,
     "cSpell.words": [
         "Arial",
-        "crossorigin"
+        "crossorigin",
+        "resave"
     ]
 }
