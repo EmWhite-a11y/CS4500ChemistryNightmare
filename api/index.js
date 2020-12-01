@@ -1,6 +1,5 @@
 const DEBUG = true
 
-<<<<<<< HEAD
 // Game states
 const State = {
     WAITING: 0,
@@ -23,27 +22,13 @@ let clients = {}
 let players = {}
 
 // Active games
-=======
-const State = {
-    UNKNOWN: 0,
-    INITIALIZED: 1,
-    STARTED: 2,
-    FINISHED: 4
-}
-
-let clients = {}
-let players = {}
->>>>>>> develop
 let games = {}
 
 // Returns a unique player identifier
 let generatePlayer = (function () {
     let count = 0
-<<<<<<< HEAD
 
     // Every time this function is called, increment count
-=======
->>>>>>> develop
     return function () {
         return count++
     }
@@ -52,18 +37,14 @@ let generatePlayer = (function () {
 // Returns a unique game identifier
 let generateGame = (function () {
     let count = 0
-<<<<<<< HEAD
 
     // Every time this function is called, increment count
-=======
->>>>>>> develop
     return function () {
         return count++
     }
 })()
 
 const routes = (app) => {
-<<<<<<< HEAD
     // Middleware to assign a user a session
     app.use((req, res, next) => {
         let player = null
@@ -104,40 +85,19 @@ const routes = (app) => {
     // Handler for the home page
     app.get('/', (req, res) => {
         // Render the home page on server
-=======
-    app.use((req, res, next) => {
-        if (!req.session.player) {
-            const player = {
-                id: generatePlayer(),
-                socket: null
-            }
-            req.session.player = player
-            res.cookie('player', player.id)
-            players[player.id] = player
-        }
-        next()
-    })
-
-    app.get('/', (req, res) => {
->>>>>>> develop
         res.render('home', {
             title: 'Home'
         })
     })
 
-<<<<<<< HEAD
     // Handler for the rules page
     app.get('/rules', (req, res) => {
         // Render the rules page on server
-=======
-    app.get('/rules', (req, res) => {
->>>>>>> develop
         res.render('rules', {
             title: 'Rules'
         })
     })
 
-<<<<<<< HEAD
     // Handler for the game page
     app.get('/game/:id', (req, res) => {
         let game = req.params.id
@@ -146,19 +106,11 @@ const routes = (app) => {
         let template = role == Role.CHEMIST ? 'game/chemist' : (role == Role.RESEARCHER ? 'game/researcher' : 'error')
         
         // Render game page on server
-=======
-    app.get('/game/:id', (req, res) => {
-        const game = req.params.id
-        const player = req.session.player.id
-        const role = games[game].players[player].role
-        const template = role == 1 ? 'game/chemist' : (role == 2 ? 'game/researcher' : 'error')
->>>>>>> develop
         res.render(template, {
             title: 'Game'
         })
     })
 
-<<<<<<< HEAD
     // Handler that catches anything that couldn't be handled
     app.use(errorHandler) // TODO: doesn't seem to catch /game
 }
@@ -173,17 +125,6 @@ function errorHandler(err, req, res, next) {
 
     // Render the error page
     res.status(err.status || 500).render('error', {
-=======
-    app.use(errorHandler)
-}
-
-function errorHandler(err, req, res, next) {
-    console.error(err.stack)
-    if (res.headersSent) {
-        return next(err)
-    }
-    res.status(500).render('error', {
->>>>>>> develop
         title: 'Error'
     })
 }
@@ -200,7 +141,6 @@ const sockets = (io) => {
             joinGame(game, player, socket)
         })
 
-<<<<<<< HEAD
         socket.on('update-count', (game, count) => {
             socket.to(game).emit('count-updated', count)
             if (count == 10) io.in(game).emit('game-finished')
@@ -212,13 +152,6 @@ const sockets = (io) => {
             clients[data.id].emit('signal', {
                 id: socket.id,
                 signal: data.signal
-=======
-        socket.on('signal', (id, signal) => {
-            if (!clients[id]) return
-            clients[data.socket_id].emit('signal', {
-                id: socket.id,
-                signal
->>>>>>> develop
             })
         })
 
@@ -228,17 +161,13 @@ const sockets = (io) => {
         })
 
         socket.on('initSend', (id) => {
-<<<<<<< HEAD
             console.log(`${socket.id} sending initSend to ${id}`)
-=======
->>>>>>> develop
             clients[id].emit('initSend', socket.id)
         })
     })
 }
 
 function connect(socket) {
-<<<<<<< HEAD
     console.log(`Client ${socket.id} connected`)
 
     clients[socket.id] = socket
@@ -247,20 +176,10 @@ function connect(socket) {
         if (id === socket.id) continue
         console.log(`Sending initReceive to ${socket.id}`)
         clients[id].emit('initReceive', socket.id)
-=======
-    log(`Client ${socket.id} connected`)
-
-    clients[socket.id] = socket
-
-    for (let client in clients) {
-        if (client === socket.id) continue
-        clients[client].emit('initReceive', socket.id)
->>>>>>> develop
     }
 }
 
 function disconnect(socket) {
-<<<<<<< HEAD
     console.log(`Client ${socket.id} disconnected`)
     
     delete clients[socket.id]
@@ -304,11 +223,6 @@ function findPlayerFromSocket(socket) {
         }
     }
     return null
-=======
-    log(`Client ${socket.id} disconnected`)
-    
-    delete clients[socket.id]
->>>>>>> develop
 }
 
 function findGame(player, socket) {
@@ -321,19 +235,12 @@ function findGame(player, socket) {
     let game = findAvailableGame()
 
     // Determine the player's role
-<<<<<<< HEAD
     let role = Role.UNKNOWN
     let count = Object.keys(games[game].players).length
     if (count == 0) role = Role.CHEMIST
     else if (count == 1) role = Role.RESEARCHER
 
     log(`Determined role ${role}`)
-=======
-    let role = 0 // 0=Other, 1=Chemist, 2=Researcher
-    if (Object.keys(games[game].players).length < 2) {
-        role = Object.keys(games[game].players).length + 1
-    }
->>>>>>> develop
 
     // Have that player join that game
     games[game].players[player] = {
@@ -343,7 +250,6 @@ function findGame(player, socket) {
         socket
     }
 
-<<<<<<< HEAD
     log(`Player ${player} created and added to game ${game}`)
     log(games[game])
 
@@ -353,27 +259,16 @@ function findGame(player, socket) {
         games[game].state = State.READY
 
         log(`Game ${game} initialized`)
-=======
-    // Start game when we have all players
-    if (canInitializeGame(game)) {
-        // Flag the game as initialized
-        games[game].state = State.INITIALIZED
->>>>>>> develop
 
         // Notify playing players that a game was found
         for (let player in games[game].players) {
             if (!isPlayablePlayer(game, player)) continue
-<<<<<<< HEAD
             log(`Notifying player ${player} game ${game} found`)
             games[game].players[player].socket.emit('found-game', game)
         }
     } else {
         log(`Game ${game} not initialized yet`)
         log(games[game])
-=======
-            games[game].players[player].socket.emit('found-game', game)
-        }
->>>>>>> develop
     }
 }
 
@@ -381,11 +276,7 @@ function joinGame(game, player, socket) {
     log(`Player ${player} joining game`)
 
     // Join the game room
-<<<<<<< HEAD
     socket.join(game)
-=======
-    //socket.join(game)
->>>>>>> develop
 
     // Update player's socket
     players[player].socket = socket
@@ -408,7 +299,6 @@ function joinGame(game, player, socket) {
 }
 
 function findAvailableGame() {
-<<<<<<< HEAD
     log('Finding an available game')
     
     // Return a game that is not yet started, which means it's still waiting for another player
@@ -419,20 +309,10 @@ function findAvailableGame() {
     log('Setting up a new game')
 
     // Set up a new game
-=======
-    // Return a game that is not yet started
-    for (let game in games) {
-        if (games[game].state == State.INITIALIZED) continue
-        return games[game].id
-    }
-
-    // Return a new game
->>>>>>> develop
     let game = generateGame()
     games[game] = {
         id: game,
         players: {},
-<<<<<<< HEAD
         state: State.WAITING
     }
 
@@ -440,15 +320,10 @@ function findAvailableGame() {
     log(games[game])
 
     // Return the new game
-=======
-        status: State.INITIALIZING
-    }
->>>>>>> develop
     return game
 }
 
 function canInitializeGame(game) {
-<<<<<<< HEAD
     log('Checking if can initialize game')
     
     // Check that we have a chemist
@@ -466,13 +341,6 @@ function canInitializeGame(game) {
     }
 
     log('Researcher found')
-=======
-    // Check that we have a chemist
-    if (!roleExists(game, 1)) return false
-
-    // Check that we have a researcher
-    if (!roleExists(game, 2)) return false
->>>>>>> develop
 
     return true
 }
@@ -495,11 +363,7 @@ function canStartGame(game) {
 
 function isPlayablePlayer(game, player) {
     let role = games[game].players[player].role
-<<<<<<< HEAD
     return role == Role.CHEMIST || role == Role.RESEARCHER
-=======
-    return role == 1 || role == 2
->>>>>>> develop
 }
 
 function log(str) {
