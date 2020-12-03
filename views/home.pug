@@ -5,8 +5,16 @@ block styles
 
 block content
     img#title(src='/images/home-title.png')
-    button#play.action-button Play
-    button#rules.action-button Rules
+    button(id='play', class='action-button', data-toggle='modal', data-target='#loadingModal') Play
+    button(id='rules', class='action-button') Rules
+
+    div(id='loadingModal', class='modal fade', tabindex='-1')
+        div(class='modal-dialog modal-dialog-centered')
+            div(class='modal-content')
+                div(class='modal-title')
+                    h1(id='loadingMessage', class='text-white text-center') Finding Game
+                div(class='modal-body')
+                    button(id='cancel', class='action-button', data-dismiss='modal') Cancel
 
 block scripts
     script(src='/socket.io/socket.io.js')

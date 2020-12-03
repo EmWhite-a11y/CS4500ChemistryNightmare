@@ -1,26 +1,53 @@
 const socket = io()
+const player = $.cookie('player')
+const loadingMessageInterval = 500
+const numLoadingMessageDots = 3
+let loadingCounter = 0
+let loadingInterval = null
 
 $('#play').on('click', function() {
-    findGame()
+    startGameSearch()
 })
 
 $('#rules').on('click', function() {
-    openRules()
+    location.href = '/rules'
 })
 
-function findGame() {
-    socket.on('found-game', game => {
+$('#cancel').on('click', function() {
+    cancelGameSearch()
+})
+
+function startGameSearch() {
+    socket.on('found-game', (game) => {
         $('#spinner').hide()
-        $('#play').removeAttr('disabled');
-        $('#rules').removeAttr('disabled');
+        clearInterval(loadingInterval)
+        loadingCounter = 0
+        
         location.href = `/game/${game}`
     })
-    socket.emit('find-game', $.cookie('player'))
+    
+    socket.emit('find-game', player)
+
     $('#spinner').show()
-    $('#play').attr('disabled', true);
-    $('#rules').attr('disabled', true);
+
+    $('#loadingMessage').html('Finding Game')
+    loadingInterval = setInterval(function() {
+        $('#loadingMessage').html(`Finding Game${'.'.repeat(loadingCounter++ % (numLoadingMessageDots + 1))}`)
+    }, loadingMessageInterval)
 }
 
-function openRules() {
-    location.href = '/rules'
+function cancelGameSearch() {
+    socket.on('game-search-cancelled', () => {
+        $('#spinner').hide()
+        clearInterval(loadingInterval)
+        loadingCounter = 0
+    })
+
+    socket.emit('cancel-game-search', player)
 }
+
+$('#loadingModal').on('hide.bs.modal', function() {
+    $('#spinner').hide()
+    clearInterval(loadingInterval)
+    loadingCounter = 0
+})

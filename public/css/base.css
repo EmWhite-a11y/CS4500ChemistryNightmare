@@ -41,8 +41,12 @@ body {
     background-color: white;
 }
 
+.action-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
 .action-button:hover,
-.action-button:focus,
 .action-button:active,
 .action-button:visited {
     border-radius: 0.12em;

@@ -137,6 +137,11 @@ const sockets = (io) => {
             findGame(player, socket)
         })
 
+        socket.on('cancel-game-search', (player) => {
+            cancelGameSearch(player)
+            socket.emit('game-search-cancelled')
+        })
+
         socket.on('join-game', (game, player) => {
             joinGame(game, player, socket)
         })
@@ -272,6 +277,14 @@ function findGame(player, socket) {
     }
 }
 
+function cancelGameSearch(player) {
+    for (let game in games) {
+        if (games[game].players[player]) {
+            delete games[game]
+        }
+    }
+}
+
 function joinGame(game, player, socket) {
     log(`Player ${player} joining game`)
 
@@ -295,6 +308,8 @@ function joinGame(game, player, socket) {
             let role = games[game].players[player].role
             games[game].players[player].socket.emit('game-joined', role)
         }
+
+        // TODO: timeout
     }
 }
 
