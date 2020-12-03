@@ -1,4 +1,5 @@
 const socket = io()
+const game = location.href.match(/([^\/]*)\/*$/)[1]
 
 let peers = {}
 let localStream = null;
@@ -90,12 +91,12 @@ function toggleMic() {
     for (let index in localStream.getAudioTracks()) {
         localStream.getAudioTracks()[index].enabled = micEnabled
     }
-    if (micEnabled) $("#mic .fas").removeClass("fa-microphone fa-microphone-slash").addClass("fa-microphone");
-    else $("#mic .fas").removeClass("fa-microphone fa-microphone-slash").addClass("fa-microphone-slash");
-    console.log(`Microphone ${micEnabled ? "enabled" : "disabled"}`);
+    if (micEnabled) $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone');
+    else $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone-slash');
+    console.log(`Microphone ${micEnabled ? 'enabled' : 'disabled'}`);
 }
 
-$("#mic").on("click", function () {
+$('#mic').on('click', function () {
     toggleMic();
 });
 
@@ -103,8 +104,8 @@ function initGame() {
     let game = location.href.match(/([^\/]*)\/*$/)[1]
     let player = $.cookie('player')
 
-    socket.on('game-finished', () => {
-        location.href = '/'
+    socket.on('game-finished', (state) => {
+        $('#gameOverModal').modal('show')
     })
 
     socket.on('leave-game', () => {
@@ -119,6 +120,19 @@ function initGame() {
     socket.emit('join-game', game, player)
     $('#spinner').show()
 }
+
+$('#gameOverModal').on('hide.bs.modal', function() {
+    return false
+})
+
+$('#home').on('click', function() {
+    $('#gameOverModal').modal('hide')
+    location.href = '/'
+})
+
+$('#leave').on('click', function() {
+    location.href = '/'
+})
 
 $(function () {
     initGame()

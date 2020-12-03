@@ -19,9 +19,5 @@
         "**/dist": true,
         "**/coverage": true
     },
-    "typescript.referencesCodeLens.enabled": true,
-    "cSpell.words": [
-        "Arial",
-        "crossorigin"
-    ]
+    "typescript.referencesCodeLens.enabled": true
 }
