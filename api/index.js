@@ -1,7 +1,7 @@
 const DEBUG = true
 
-// Game states
-const State = {
+// Game statuses
+const Status = {
     WAITING: 0,
     READY: 1,
     STARTED: 2,
@@ -26,7 +26,7 @@ let players = {}
 let games = {}
 
 let gameState = {
-    time: 0, // seconds
+    time: 0,
     researcher: {
         beaker: {
             volume: 0,
@@ -173,7 +173,7 @@ const sockets = (io) => {
 
         socket.on('update-count', (game, count) => {
             socket.to(game).emit('count-updated', count)
-            if (count == 10) endGame(io, game, State.WON)
+            if (count == 10) endGame(io, game, Status.WON)
         })
 
         socket.on('signal', (data) => {
@@ -222,7 +222,7 @@ function disconnect(socket) {
     }
     
     if (game !== null) {
-        if (games[game].state === State.STARTED) {
+        if (games[game].status === Status.STARTED) {
             log(`Game ${game} ending`)
 
             for (let player in games[game].players) {
@@ -288,7 +288,7 @@ function findGame(io, socket, player) {
     // Start game when we have all players
     if (canInitializeGame(game)) {
         // Flag the game as initialized
-        games[game].state = State.READY
+        games[game].status = Status.READY
 
         log(`Game ${game} initialized`)
 
@@ -300,7 +300,7 @@ function findGame(io, socket, player) {
         }
 
         games[game].timeout = setTimeout(function() {
-            endGame(io, game, State.LOST)
+            endGame(io, game, Status.LOST)
         }, 10 * 1000)
     } else {
         log(`Game ${game} not initialized yet`)
@@ -308,8 +308,8 @@ function findGame(io, socket, player) {
     }
 }
 
-function endGame(io, game, state) {
-    io.in(game).emit('game-finished', state)
+function endGame(io, game, status) {
+    io.in(game).emit('game-finished', status)
     clearTimeout(games[game].timeout)
 }
 
@@ -336,7 +336,7 @@ function joinGame(game, player, socket) {
     // Notify playing players that the game is starting
     if (canStartGame(game)) {
         // Flag the game as started
-        games[game].state = State.STARTED
+        games[game].status = Status.STARTED
 
         // Notify playing players that a game was found
         for (let player in games[game].players) {
@@ -352,7 +352,7 @@ function findAvailableGame() {
     
     // Return a game that is not yet started, which means it's still waiting for another player
     for (let game in games) {
-        if (games[game].state === State.WAITING) return game
+        if (games[game].status === Status.WAITING) return game
     }
 
     log('Setting up a new game')
@@ -362,7 +362,7 @@ function findAvailableGame() {
     games[game] = {
         id: game,
         players: {},
-        state: State.WAITING
+        status: Status.WAITING
     }
 
     log('New game created')
