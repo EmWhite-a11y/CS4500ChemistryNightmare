@@ -1,5 +1,4 @@
 const socket = io()
-const player = $.cookie('player')
 const loadingMessageInterval = 500
 const numLoadingMessageDots = 3
 let loadingCounter = 0
@@ -19,6 +18,8 @@ $('#cancel').on('click', function() {
 
 function startGameSearch() {
     socket.on('found-game', (game) => {
+        $('#loadingMessage').html('Found Game')
+        
         $('#spinner').hide()
         clearInterval(loadingInterval)
         loadingCounter = 0

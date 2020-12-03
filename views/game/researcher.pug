@@ -1,21 +1,11 @@
-extends ../base
+extends base
 
-block styles
-    link(rel='stylesheet', href='/css/game.css')
+block game-styles
+    link(rel='stylesheet', href='/css/game/researcher.css')
 
-block content
+block game-content
     img(id='title', src='/images/researcher-title.png')
     div(id='reader') 0
 
-    div(id='mic', class='media-container')
-        div(class='media-icon-holder')
-            i(class='fas fa-microphone-slash')
-
-    video(id='localVideo', class='d-none', autoplay, muted)
-    video(id='remoteVideo', class='d-none', autoplay, muted)
-
-block scripts
-    script(src='/socket.io/socket.io.js')
-    script(src='/simple-peer/simplepeer.min.js')
-    script(src='/js/game/base.js')
+block game-scripts
     script(src='/js/game/researcher.js')

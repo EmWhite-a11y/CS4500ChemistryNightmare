@@ -5,7 +5,8 @@ const State = {
     WAITING: 0,
     READY: 1,
     STARTED: 2,
-    FINISHED: 3
+    WON: 3,
+    LOST: 4
 }
 
 // Player roles
@@ -23,6 +24,30 @@ let players = {}
 
 // Active games
 let games = {}
+
+let gameState = {
+    time: 0, // seconds
+    researcher: {
+        beaker: {
+            volume: 0,
+            colors: {
+                red: 0,
+                yellow: 0,
+                blue: 0
+            }
+        }
+    },
+    chemist: {
+        beaker: {
+            volume: 0,
+            colors: {
+                red: 0,
+                yellow: 0,
+                blue: 0
+            }
+        }
+    }
+}
 
 // Returns a unique player identifier
 let generatePlayer = (function () {
@@ -134,7 +159,7 @@ const sockets = (io) => {
         connect(socket)
 
         socket.on('find-game', (player) => {
-            findGame(player, socket)
+            findGame(io, socket, player)
         })
 
         socket.on('cancel-game-search', (player) => {
@@ -148,7 +173,7 @@ const sockets = (io) => {
 
         socket.on('update-count', (game, count) => {
             socket.to(game).emit('count-updated', count)
-            if (count == 10) io.in(game).emit('game-finished')
+            if (count == 10) endGame(io, game, State.WON)
         })
 
         socket.on('signal', (data) => {
@@ -195,6 +220,7 @@ function disconnect(socket) {
     if (player !== null) {
         log(`Player ${player} left game ${game}`)
     }
+    
     if (game !== null) {
         if (games[game].state === State.STARTED) {
             log(`Game ${game} ending`)
@@ -230,7 +256,7 @@ function findPlayerFromSocket(socket) {
     return null
 }
 
-function findGame(player, socket) {
+function findGame(io, socket, player) {
     log(`Player ${player} finding game`)
 
     // Set player's socket
@@ -252,7 +278,8 @@ function findGame(player, socket) {
         id: player,
         role,
         ready: false,
-        socket
+        socket,
+        timeout: null
     }
 
     log(`Player ${player} created and added to game ${game}`)
@@ -271,10 +298,19 @@ function findGame(player, socket) {
             log(`Notifying player ${player} game ${game} found`)
             games[game].players[player].socket.emit('found-game', game)
         }
+
+        games[game].timeout = setTimeout(function() {
+            endGame(io, game, State.LOST)
+        }, 10 * 1000)
     } else {
         log(`Game ${game} not initialized yet`)
         log(games[game])
     }
+}
+
+function endGame(io, game, state) {
+    io.in(game).emit('game-finished', state)
+    clearTimeout(games[game].timeout)
 }
 
 function cancelGameSearch(player) {
@@ -308,8 +344,6 @@ function joinGame(game, player, socket) {
             let role = games[game].players[player].role
             games[game].players[player].socket.emit('game-joined', role)
         }
-
-        // TODO: timeout
     }
 }
 
