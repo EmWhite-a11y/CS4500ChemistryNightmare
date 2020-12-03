@@ -7,6 +7,22 @@ block content
     img(id='title', src='/images/chemist-title.png')
     button(id='writer', class='action-button') Press Me
 
+    div.container
+        .row
+            .col-md-6
+                div(id='tools' styles='align=center')
+                    img(src='/images/tools.png')
+                .row
+                    .col-md-6
+                        div(id='toolsLeft' style='align=right')
+                            a.img(source='/images/bunsen.png' class='btn btn-default btn-lg')
+                    .col-md-6
+                        div(id='toolsRight' style='align=left')
+                            p Bunsen Burner
+                            p Used to raise temp
+            .col-md-6
+                div(id="chemBeaker" vertical-align="middle" align="center")
+
     div(id='mic', class='media-container')
         div(class='media-icon-holder')
             i(class='fas fa-microphone-slash')
