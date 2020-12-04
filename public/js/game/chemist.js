@@ -19,7 +19,7 @@ socket.on('game-state-updated', (state) => {
 
 $('#volume-up').on('click', function() {
     beaker.volume++
-    if (beaker.volume > 10) beaker.volume = 10
+    if (beaker.volume > 3) beaker.volume = 3
     sendBeakerState()
 })
 
@@ -31,7 +31,7 @@ $('#volume-down').on('click', function() {
 
 $('#red-up').on('click', function() {
     beaker.color.red++
-    if (beaker.color.red > 10) beaker.color.red = 10
+    if (beaker.color.red > 3) beaker.color.red = 3
     sendBeakerState()
 })
 
@@ -43,7 +43,7 @@ $('#red-down').on('click', function() {
 
 $('#yellow-up').on('click', function() {
     beaker.color.yellow++
-    if (beaker.color.yellow > 10) beaker.color.yellow = 10
+    if (beaker.color.yellow > 3) beaker.color.yellow = 3
     sendBeakerState()
 })
 
@@ -55,7 +55,7 @@ $('#yellow-down').on('click', function() {
 
 $('#blue-up').on('click', function() {
     beaker.color.blue++
-    if (beaker.color.blue > 10) beaker.color.blue = 10
+    if (beaker.color.blue > 3) beaker.color.blue = 3
     sendBeakerState()
 })
 
@@ -67,19 +67,19 @@ $('#blue-down').on('click', function() {
 
 $('#temperature-up').on('click', function() {
     beaker.temperature++
-    if (beaker.temperature > 10) beaker.temperature = 10
+    if (beaker.temperature > 30) beaker.temperature = 30
     sendBeakerState()
 })
 
 $('#temperature-down').on('click', function() {
     beaker.temperature--
-    if (beaker.temperature < 0) beaker.temperature = 0
+    if (beaker.temperature < 10) beaker.temperature = 10
     sendBeakerState()
 })
 
 $('#pH-up').on('click', function() {
     beaker.pH++
-    if (beaker.pH > 10) beaker.pH = 10
+    if (beaker.pH > 14) beaker.pH = 14
     sendBeakerState()
 })
 

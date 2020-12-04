@@ -1,7 +1,6 @@
 const DEBUG = false
 
-// Game statuses
-const Status = {
+const GameStatus = {
     WAITING: 0,
     READY: 1,
     STARTED: 2,
@@ -9,8 +8,7 @@ const Status = {
     LOST: 4
 }
 
-// Player roles
-const Role = {
+const PlayerRole = {
     UNKNOWN: 0,
     CHEMIST: 1,
     RESEARCHER: 2
