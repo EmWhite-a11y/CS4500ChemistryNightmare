@@ -130,6 +130,19 @@ const routes = (app) => {
             title: 'Game'
         })
     })
+    
+    // Set up the sandbox handler if we're in development mode
+    if (app.get('env') === 'development') {
+        // Handler for the sandbox page
+        app.get('/sandbox', (req, res) => {
+            // Render the sandbox page
+            res.render('sandbox', {
+                title: 'Sandbox'
+            })
+        })
+
+        log('Using sandbox mode')
+    }
 
     // Handler that catches anything that couldn't be handled
     app.use((req, res) => {
