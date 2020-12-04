@@ -10,35 +10,35 @@ block content
     div.container
         .row
             .col-md-6
-                div(id='tools' align='center')
+                div(id='tools-title' align='center')                                
                     img(src='/images/tools.png')
-                div(id='tools' align='center')
-                    button(id='burner' type='button' class='btn btn-default') Bunsen Burner
-                    p Bunsen Burner - used to raise temp
-                div(id='colorCups' align='center')    
-                    canvas#cup-red.hoverable(width='50' height='50')   
-                    canvas#cup-yellow.hoverable(width='50' height='50')   
-                    canvas#cup-blue.hoverable(width='50' height='50')
-                    p Color - mix colors match the researchers beaker
-                div(id='phBalance' align='center')
-                    canvas#cup-acid.hoverable(width='50' height='50')
-                    p Base or Acid - used to change pH
-                div(id='phBalance' align='center')
-                    canvas#cup-base.hoverable(width='50' height='50')
-                    p IceBox - used to lower temp
-                div(id='iceBox' align='center')
-                    canvas#cup-icebox.hoverable(width='50' height='50')
-                    p IceBox - used to lower temp
-                div(id='sink' align='center')
-                    canvas#cup-sink.hoverable(width='90' height='50')
-                    p Sink - used to start over
+                .container
+                    .row
+                        .col-md-6
+                            div(id='tools-burner' align='center')
+                                button(id='burner' type='button' class='btn btn-default') Bunsen Burner
+                                p Bunsen Burner - used to raise temp
+                            div(id='tools-colorCups' align='center')    
+                                canvas#cup-red.hoverable(width='50' height='50')   
+                                canvas#cup-yellow.hoverable(width='50' height='50')   
+                                canvas#cup-blue.hoverable(width='50' height='50')
+                                p Color - mix colors match the researchers beaker
+                        .col-md-6
+                            div(id='tools-phBalance' align='center')
+                                canvas#cup-acid.hoverable(width='50' height='50')
+                                canvas#cup-base.hoverable(width='50' height='50')
+                                p Base or Acid - used to change pH
+                            div(id='tools-iceBox' align='center')
+                                canvas#cup-icebox.hoverable(width='50' height='50')
+                                p IceBox - used to lower temp
+                            div(id='tools-sink' align='center')
+                                canvas#cup-sink.hoverable(width='90' height='50')
+                                p Sink - used to start over
             .col-md-6
-                div(id='chemBeaker' align='center')
-                    canvas#beaker(width='100' height='120')
-
-    div(id='mic', class='media-container')
-        div(class='media-icon-holder')
-            i(class='fas fa-microphone-slash')
+                div(id='chemBeaker')
+                    img(src="/images/chemist-title.png", alt="Chemist")
+                div(id='beaker')
+                    canvas#beaker-1(width='100' height='120')
 
     video(id='localVideo', class='d-none', autoplay, muted)
     video(id='remoteVideo', class='d-none', autoplay, muted)

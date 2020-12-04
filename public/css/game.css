@@ -77,3 +77,19 @@ canvas {
     display: table;
     clear: both;
 }
+
+#beaker {
+    padding: 100px 200px;
+}
+
+#tools-title,
+#tools-burner,
+#tools-colorCups,
+#tools-phBalance,
+#tools-iceBox,
+#tools-sink,
+#cup-red,
+#cup-yellow,
+#cup-blue {
+    padding: 5px;
+}
