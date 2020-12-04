@@ -5,7 +5,50 @@ block game-styles
 
 block game-content
     img(id='title', src='/images/chemist-title.png')
-    button(id='writer', class='action-button') Press Me
+
+    div(class='d-flex justify-content-center')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                button(id='volume-up', class='btn btn-light')
+                    i(class='fas fa-arrow-up')
+                div(id='volume', class='btn btn-light') Volume: 0
+                button(id='volume-down', class='btn btn-light')
+                    i(class='fas fa-arrow-down')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                button(id='red-up', class='btn btn-light')
+                    i(class='fas fa-arrow-up')
+                div(id='red', class='btn btn-light') Red: 0
+                button(id='red-down', class='btn btn-light')
+                    i(class='fas fa-arrow-down')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                button(id='yellow-up', class='btn btn-light')
+                    i(class='fas fa-arrow-up')
+                div(id='yellow', class='btn btn-light') Yellow: 0
+                button(id='yellow-down', class='btn btn-light')
+                    i(class='fas fa-arrow-down')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                button(id='blue-up', class='btn btn-light')
+                    i(class='fas fa-arrow-up')
+                div(id='blue', class='btn btn-light') Blue: 0
+                button(id='blue-down', class='btn btn-light')
+                    i(class='fas fa-arrow-down')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                button(id='temperature-up', class='btn btn-light')
+                    i(class='fas fa-arrow-up')
+                div(id='temperature', class='btn btn-light') Temperature: 0
+                button(id='temperature-down', class='btn btn-light')
+                    i(class='fas fa-arrow-down')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                button(id='pH-up', class='btn btn-light')
+                    i(class='fas fa-arrow-up')
+                div(id='pH', class='btn btn-light') pH: 0
+                button(id='pH-down', class='btn btn-light')
+                    i(class='fas fa-arrow-down')
 
 block game-scripts
     script(src='/js/game/chemist.js')

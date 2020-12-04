@@ -1,7 +1,7 @@
-const DEBUG = true
+const DEBUG = false
 
-// Game states
-const State = {
+// Game statuses
+const Status = {
     WAITING: 0,
     READY: 1,
     STARTED: 2,
