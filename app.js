@@ -14,6 +14,7 @@ const server = require('httpolyglot').createServer(options, app)
 const io = require('socket.io')(server)
 const api = require('./api')
 
+app.set('env', process.env.NODE_ENV || 'production')
 app.set('port', process.env.PORT || 5000)
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
