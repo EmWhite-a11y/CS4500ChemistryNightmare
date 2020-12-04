@@ -132,20 +132,11 @@ const routes = (app) => {
     })
 
     // Handler that catches anything that couldn't be handled
-    app.use(errorHandler) // TODO: doesn't seem to catch /game
-}
-
-function errorHandler(err, req, res, next) {
-    // Output the error to the terminal
-    console.error(err.stack)
-
-    if (res.headersSent) {
-        return next(err)
-    }
-
-    // Render the error page
-    res.status(err.status || 500).render('error', {
-        title: 'Error'
+    app.use((req, res) => {
+        // Render the 404 page
+        res.status(404).render('404', {
+            title: '404'
+        })
     })
 }
 

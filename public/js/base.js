@@ -20,6 +20,10 @@ $('#back').on('click', function() {
     history.back()
 })
 
+$('#home').on('click', function() {
+    location.href = '/'
+})
+
 $(function() {
     $('#spinner').hide()
 })
