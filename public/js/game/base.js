@@ -1,6 +1,8 @@
 const socket = io()
 const game = location.href.match(/([^\/]*)\/*$/)[1]
 
+let state = null
+
 let peers = {}
 let localStream = null;
 
@@ -49,6 +51,7 @@ function init() {
 }
 
 function removePeer(id) {
+    return // TODO: remove
     if (remoteVideo) {
         let source = remoteVideo.srcObject
         if (source) {
@@ -104,7 +107,7 @@ function initGame() {
     let game = location.href.match(/([^\/]*)\/*$/)[1]
     let player = $.cookie('player')
 
-    socket.on('game-finished', (state) => {
+    socket.on('game-finished', (status) => {
         $('#gameOverModal').modal('show')
     })
 
@@ -115,6 +118,13 @@ function initGame() {
     socket.on('game-joined', (role) => {
         $('#spinner').hide()
         console.log(`Player ${player} has role ${role} for game ${game}`)
+    })
+
+    socket.on('init-game-state', (state) => {
+        window.state = state
+        log(window.state)
+        log('Initialized game state')
+        initGameState()
     })
     
     socket.emit('join-game', game, player)
@@ -133,6 +143,12 @@ $('#home').on('click', function() {
 $('#leave').on('click', function() {
     location.href = '/'
 })
+
+function sendGameState() {
+    log('Sending game-state')
+    log(window.state)
+    socket.emit('update-game-state', game, window.state)
+}
 
 $(function () {
     initGame()

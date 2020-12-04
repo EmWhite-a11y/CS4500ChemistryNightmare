@@ -1,4 +1,4 @@
-const DEBUG = true
+const DEBUG = false
 
 // Game statuses
 const Status = {
@@ -24,30 +24,6 @@ let players = {}
 
 // Active games
 let games = {}
-
-let gameState = {
-    time: 0,
-    researcher: {
-        beaker: {
-            volume: 0,
-            colors: {
-                red: 0,
-                yellow: 0,
-                blue: 0
-            }
-        }
-    },
-    chemist: {
-        beaker: {
-            volume: 0,
-            colors: {
-                red: 0,
-                yellow: 0,
-                blue: 0
-            }
-        }
-    }
-}
 
 // Returns a unique player identifier
 let generatePlayer = (function () {
@@ -156,24 +132,22 @@ function errorHandler(err, req, res, next) {
 
 const sockets = (io) => {
     io.on('connection', (socket) => {
-        connect(socket)
+        connect(io, socket)
 
         socket.on('find-game', (player) => {
             findGame(io, socket, player)
         })
 
         socket.on('cancel-game-search', (player) => {
-            cancelGameSearch(player)
-            socket.emit('game-search-cancelled')
+            cancelGameSearch(io, socket, player)
         })
 
         socket.on('join-game', (game, player) => {
-            joinGame(game, player, socket)
+            joinGame(io, socket, game, player)
         })
 
-        socket.on('update-count', (game, count) => {
-            socket.to(game).emit('count-updated', count)
-            if (count == 10) endGame(io, game, Status.WON)
+        socket.on('update-game-state', (game, state) => {
+            updateGameState(io, socket, game, state)
         })
 
         socket.on('signal', (data) => {
@@ -187,7 +161,7 @@ const sockets = (io) => {
 
         socket.on('disconnect', () => {
             socket.broadcast.emit('removePeer', socket.id)
-            disconnect(socket)
+            disconnect(io, socket)
         })
 
         socket.on('initSend', (id) => {
@@ -197,7 +171,30 @@ const sockets = (io) => {
     })
 }
 
-function connect(socket) {
+function updateGameState(io, socket, game, state) {
+    log('Updating game-state')
+    log(state)
+
+    games[game].state = state
+
+    if (checkBeakerMatches(game)) endGame(io, game, Status.WON)
+    
+    io.to(game).emit('game-state-updated', state)
+
+    log('Updated game-state')
+}
+
+function checkBeakerMatches(game) {
+    if (games[game].state.researcher.beaker.volume !== games[game].state.chemist.beaker.volume) return false
+    if (games[game].state.researcher.beaker.color.red !== games[game].state.chemist.beaker.color.red) return false
+    if (games[game].state.researcher.beaker.color.yellow !== games[game].state.chemist.beaker.color.yellow) return false
+    if (games[game].state.researcher.beaker.color.blue !== games[game].state.chemist.beaker.color.blue) return false
+    if (games[game].state.researcher.beaker.temperature !== games[game].state.chemist.beaker.temperature) return false
+    if (games[game].state.researcher.beaker.pH !== games[game].state.chemist.beaker.pH) return false
+    return true
+}
+
+function connect(io, socket) {
     console.log(`Client ${socket.id} connected`)
 
     clients[socket.id] = socket
@@ -209,7 +206,7 @@ function connect(socket) {
     }
 }
 
-function disconnect(socket) {
+function disconnect(io, socket) {
     console.log(`Client ${socket.id} disconnected`)
     
     delete clients[socket.id]
@@ -299,9 +296,9 @@ function findGame(io, socket, player) {
             games[game].players[player].socket.emit('found-game', game)
         }
 
-        games[game].timeout = setTimeout(function() {
-            endGame(io, game, Status.LOST)
-        }, 10 * 1000)
+        //games[game].timeout = setTimeout(function() {
+        //    endGame(io, game, Status.LOST)
+        //}, 60 * 1000)
     } else {
         log(`Game ${game} not initialized yet`)
         log(games[game])
@@ -310,10 +307,11 @@ function findGame(io, socket, player) {
 
 function endGame(io, game, status) {
     io.in(game).emit('game-finished', status)
-    clearTimeout(games[game].timeout)
+    //if (games[game].timeout) clearTimeout(games[game].timeout)
 }
 
-function cancelGameSearch(player) {
+function cancelGameSearch(io, socket, player) {
+    socket.emit('game-search-cancelled')
     for (let game in games) {
         if (games[game].players[player]) {
             delete games[game]
@@ -321,7 +319,7 @@ function cancelGameSearch(player) {
     }
 }
 
-function joinGame(game, player, socket) {
+function joinGame(io, socket, game, player) {
     log(`Player ${player} joining game`)
 
     // Join the game room
@@ -343,6 +341,7 @@ function joinGame(game, player, socket) {
             if (!isPlayablePlayer(game, player)) continue
             let role = games[game].players[player].role
             games[game].players[player].socket.emit('game-joined', role)
+            games[game].players[player].socket.emit('init-game-state', games[game].state)
         }
     }
 }
@@ -362,7 +361,34 @@ function findAvailableGame() {
     games[game] = {
         id: game,
         players: {},
-        status: Status.WAITING
+        status: Status.WAITING,
+        state: {
+            time: 7,
+            researcher: {
+                beaker: {
+                    volume: 1,
+                    color: {
+                        red: 2,
+                        yellow: 3,
+                        blue: 4
+                    },
+                    temperature: 5,
+                    pH: 6
+                }
+            },
+            chemist: {
+                beaker: {
+                    volume: 6,
+                    color: {
+                        red: 5,
+                        yellow: 4,
+                        blue: 3
+                    },
+                    temperature: 2,
+                    pH: 1
+                }
+            }
+        }
     }
 
     log('New game created')

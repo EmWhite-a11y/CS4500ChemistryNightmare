@@ -5,7 +5,48 @@ block game-styles
 
 block game-content
     img(id='title', src='/images/researcher-title.png')
-    div(id='reader') 0
+
+    h1(class='text-center') Researcher's Beaker
+    div(class='d-flex justify-content-center')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='researcher-volume', class='btn btn-light') Volume: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='researcher-red', class='btn btn-light') Red: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='researcher-yellow', class='btn btn-light') Yellow: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='researcher-blue', class='btn btn-light') Blue: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='researcher-temperature', class='btn btn-light') Temperature: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='researcher-pH', class='btn btn-light') pH: 0
+    
+    h1(class='text-center') Chemist's Beaker
+    div(class='d-flex justify-content-center')
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='chemist-volume', class='btn btn-light') Volume: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='chemist-red', class='btn btn-light') Red: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='chemist-yellow', class='btn btn-light') Yellow: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='chemist-blue', class='btn btn-light') Blue: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='chemist-temperature', class='btn btn-light') Temperature: 0
+        div(class='d-inline-block m-1')
+            div(class='btn-group-vertical')
+                div(id='chemist-pH', class='btn btn-light') pH: 0
 
 block game-scripts
     script(src='/js/game/researcher.js')
