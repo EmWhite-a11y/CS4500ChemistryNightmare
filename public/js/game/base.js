@@ -1,7 +1,6 @@
 const socket = io()
 
 const game = location.href.match(/([^\/]*)\/*$/)[1]
-
 let state = null
 
 let peers = {}
@@ -10,14 +9,7 @@ let micEnabled = false
 
 navigator.mediaDevices.getUserMedia({
     audio: true,
-    video: {
-        width: {
-            ideal: 200
-        },
-        height: {
-            ideal: 200
-        }
-    }
+    video: false
 }).then((stream) => {
     log('Received local stream')
     localVideo.srcObject = stream

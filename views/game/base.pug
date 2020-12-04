@@ -13,8 +13,8 @@ block content
         div(class='media-icon-holder')
             i(class='fas fa-microphone-slash')
 
-    video(id='localVideo', autoplay)
-    video(id='remoteVideo', autoplay)
+    video(id='localVideo', class='d-none', autoplay, muted)
+    video(id='remoteVideo', class='d-none', autoplay, muted)
 
     div(id='gameOverModal', class='modal fade', tabindex='-1')
         div(class='modal-dialog modal-dialog-centered')
