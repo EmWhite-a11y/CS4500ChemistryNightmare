@@ -398,8 +398,10 @@ function generateInitialGameState() {
 
     gameState.researcher.beaker = researcherBeaker
     gameState.chemist.beaker = chemistBeaker
+
+    gameState.time = 0
     
-    let mask = [3, 5, 6][getRandomInterval(0, 2)]
+    let mask = [0b011, 0b101, 0b110][getRandomInterval(0, 2)]
 
     gameState.researcher.beaker.color.red = 0
     gameState.researcher.beaker.color.yellow = 0
@@ -407,21 +409,15 @@ function generateInitialGameState() {
 
     for (let i = 0; i < 3; i++) {
         let choice = getRandomBoolean()
-        switch (mask) {
-            case 3:
-                if (choice) gameState.researcher.beaker.color.yellow++
-                else gameState.researcher.beaker.color.blue++
-                break
-            case 5:
-                if (choice) gameState.researcher.beaker.color.red++
-                else gameState.researcher.beaker.color.blue++
-                break
-            case 6:
-                if (choice) gameState.researcher.beaker.color.red++
-                else gameState.researcher.beaker.color.yellow++
-                break
-            default:
-                throw 'Unknown mask value!'
+        if (mask & 0b011) {
+            if (choice) gameState.researcher.beaker.color.yellow++
+            else gameState.researcher.beaker.color.blue++
+        } else if (mask & 0b101) {
+            if (choice) gameState.researcher.beaker.color.red++
+            else gameState.researcher.beaker.color.blue++
+        } else if (mask & 0b110) {
+            if (choice) gameState.researcher.beaker.color.red++
+            else gameState.researcher.beaker.color.yellow++
         }
         gameState.researcher.beaker.volume++
     }
@@ -434,7 +430,7 @@ function generateInitialGameState() {
     gameState.chemist.beaker.color.yellow = 0
     gameState.chemist.beaker.color.blue = 0
     gameState.chemist.beaker.temperature = 20
-    gameState.chemist.beaker.pH = 0
+    gameState.chemist.beaker.pH = 7
 
     return gameState
 }
