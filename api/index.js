@@ -1,7 +1,6 @@
 const DEBUG = false
 
-// Game statuses
-const Status = {
+const GameStatus = {
     WAITING: 0,
     READY: 1,
     STARTED: 2,
@@ -9,11 +8,31 @@ const Status = {
     LOST: 4
 }
 
-// Player roles
-const Role = {
+const PlayerRole = {
     UNKNOWN: 0,
     CHEMIST: 1,
     RESEARCHER: 2
+}
+
+const stateTemplate = {
+    time: null, // Seconds
+    researcher: {
+        beaker: null
+    },
+    chemist: {
+        beaker: null
+    }
+}
+
+const beakerTemplate = {
+    volume: null, // Liters
+    color: {
+        red: null,
+        yellow: null,
+        blue: null
+    },
+    temperature: null, // Celsius
+    pH: null // Ranges from 0 to 14
 }
 
 // Socket connections
@@ -104,7 +123,7 @@ const routes = (app) => {
         let game = req.params.id
         let player = req.session.player.id
         let role = games[game].players[player].role
-        let template = role == Role.CHEMIST ? 'game/chemist' : (role == Role.RESEARCHER ? 'game/researcher' : 'error')
+        let template = role == PlayerRole.CHEMIST ? 'game/chemist' : (role == PlayerRole.RESEARCHER ? 'game/researcher' : 'error')
         
         // Render game page on server
         res.render(template, {
@@ -177,7 +196,7 @@ function updateGameState(io, socket, game, state) {
 
     games[game].state = state
 
-    if (checkBeakerMatches(game)) endGame(io, game, Status.WON)
+    if (checkBeakerMatches(game)) endGame(io, game, GameStatus.WON)
     
     io.to(game).emit('game-state-updated', state)
 
@@ -219,7 +238,7 @@ function disconnect(io, socket) {
     }
     
     if (game !== null) {
-        if (games[game].status === Status.STARTED) {
+        if (games[game].status === GameStatus.STARTED) {
             log(`Game ${game} ending`)
 
             for (let player in games[game].players) {
@@ -263,10 +282,10 @@ function findGame(io, socket, player) {
     let game = findAvailableGame()
 
     // Determine the player's role
-    let role = Role.UNKNOWN
+    let role = PlayerRole.UNKNOWN
     let count = Object.keys(games[game].players).length
-    if (count == 0) role = Role.CHEMIST
-    else if (count == 1) role = Role.RESEARCHER
+    if (count == 0) role = PlayerRole.CHEMIST
+    else if (count == 1) role = PlayerRole.RESEARCHER
 
     log(`Determined role ${role}`)
 
@@ -285,7 +304,7 @@ function findGame(io, socket, player) {
     // Start game when we have all players
     if (canInitializeGame(game)) {
         // Flag the game as initialized
-        games[game].status = Status.READY
+        games[game].status = GameStatus.READY
 
         log(`Game ${game} initialized`)
 
@@ -297,7 +316,7 @@ function findGame(io, socket, player) {
         }
 
         //games[game].timeout = setTimeout(function() {
-        //    endGame(io, game, Status.LOST)
+        //    endGame(io, game, GameStatus.LOST)
         //}, 60 * 1000)
     } else {
         log(`Game ${game} not initialized yet`)
@@ -334,7 +353,7 @@ function joinGame(io, socket, game, player) {
     // Notify playing players that the game is starting
     if (canStartGame(game)) {
         // Flag the game as started
-        games[game].status = Status.STARTED
+        games[game].status = GameStatus.STARTED
 
         // Notify playing players that a game was found
         for (let player in games[game].players) {
@@ -351,7 +370,7 @@ function findAvailableGame() {
     
     // Return a game that is not yet started, which means it's still waiting for another player
     for (let game in games) {
-        if (games[game].status === Status.WAITING) return game
+        if (games[game].status === GameStatus.WAITING) return game
     }
 
     log('Setting up a new game')
@@ -361,34 +380,8 @@ function findAvailableGame() {
     games[game] = {
         id: game,
         players: {},
-        status: Status.WAITING,
-        state: {
-            time: 7,
-            researcher: {
-                beaker: {
-                    volume: 1,
-                    color: {
-                        red: 2,
-                        yellow: 3,
-                        blue: 4
-                    },
-                    temperature: 5,
-                    pH: 6
-                }
-            },
-            chemist: {
-                beaker: {
-                    volume: 6,
-                    color: {
-                        red: 5,
-                        yellow: 4,
-                        blue: 3
-                    },
-                    temperature: 2,
-                    pH: 1
-                }
-            }
-        }
+        status: GameStatus.WAITING,
+        state: generateInitialGameState()
     }
 
     log('New game created')
@@ -398,11 +391,61 @@ function findAvailableGame() {
     return game
 }
 
+function generateInitialGameState() {
+    let gameState = JSON.parse(JSON.stringify(stateTemplate))
+    let researcherBeaker = JSON.parse(JSON.stringify(beakerTemplate))
+    let chemistBeaker = JSON.parse(JSON.stringify(beakerTemplate))
+
+    gameState.researcher.beaker = researcherBeaker
+    gameState.chemist.beaker = chemistBeaker
+    
+    let mask = [3, 5, 6][getRandomInterval(0, 2)]
+
+    gameState.researcher.beaker.color.red = 0
+    gameState.researcher.beaker.color.yellow = 0
+    gameState.researcher.beaker.color.blue = 0
+
+    for (let i = 0; i < 3; i++) {
+        let choice = getRandomBoolean()
+        switch (mask) {
+            case 3:
+                if (choice) gameState.researcher.beaker.color.yellow++
+                else gameState.researcher.beaker.color.blue++
+                break
+            case 5:
+                if (choice) gameState.researcher.beaker.color.red++
+                else gameState.researcher.beaker.color.blue++
+                break
+            case 6:
+                if (choice) gameState.researcher.beaker.color.red++
+                else gameState.researcher.beaker.color.yellow++
+                break
+            default:
+                throw 'Unknown mask value!'
+        }
+        gameState.researcher.beaker.volume++
+    }
+
+    gameState.researcher.beaker.temperature = getRandomInterval(10, 30)
+    gameState.researcher.beaker.pH = getRandomInterval(0, 14)
+
+    gameState.chemist.beaker.volume = 0
+    gameState.chemist.beaker.color.red = 0
+    gameState.chemist.beaker.color.yellow = 0
+    gameState.chemist.beaker.color.blue = 0
+    gameState.chemist.beaker.temperature = 20
+    gameState.chemist.beaker.pH = 0
+
+    return gameState
+}
+
+console.log(JSON.stringify(generateInitialGameState(), null, 4))
+
 function canInitializeGame(game) {
     log('Checking if can initialize game')
     
     // Check that we have a chemist
-    if (!roleExists(game, Role.CHEMIST)) {
+    if (!roleExists(game, PlayerRole.CHEMIST)) {
         log('Missing chemist')
         return false
     }
@@ -410,7 +453,7 @@ function canInitializeGame(game) {
     log('Chemist found')
 
     // Check that we have a researcher
-    if (!roleExists(game, Role.RESEARCHER)) {
+    if (!roleExists(game, PlayerRole.RESEARCHER)) {
         log('Missing researcher')
         return false
     }
@@ -438,7 +481,15 @@ function canStartGame(game) {
 
 function isPlayablePlayer(game, player) {
     let role = games[game].players[player].role
-    return role == Role.CHEMIST || role == Role.RESEARCHER
+    return role == PlayerRole.CHEMIST || role == PlayerRole.RESEARCHER
+}
+
+function getRandomInterval(min, max) {
+    return Math.floor((Math.random() * (max - min + 1)) + min)
+}
+
+function getRandomBoolean() {
+    return Math.random() < 0.5
 }
 
 function log(str) {
