@@ -1,65 +1,74 @@
 const socket = io()
+
 const game = location.href.match(/([^\/]*)\/*$/)[1]
 
 let state = null
 
 let peers = {}
-let localStream = null;
-
-const configuration = {}
-const constraints = {
-    audio: true,
-    video: false
-}
-
+let localStream = null
 let micEnabled = false
 
-navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-    console.log('Received local stream');
-    localVideo.srcObject = stream;
-    localStream = stream;
-    init()
-}).catch(e => alert(`getUserMedia() error: ${e.name}`))
+navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: {
+        width: {
+            ideal: 200
+        },
+        height: {
+            ideal: 200
+        }
+    }
+}).then((stream) => {
+    log('Received local stream')
+    localVideo.srcObject = stream
+    localStream = stream
+    log('Local stream ready')
+    initSignals()
+}).catch((error) => alert(`getUserMedia() error: ${error.name}`))
 
-function init() {
-    socket.on('initReceive', socket_id => {
-        console.log('INIT RECEIVE ' + socket_id)
-        addPeer(socket_id, false)
-        socket.emit('initSend', socket_id)
+function initSignals() {
+    socket.on('vc-init-receive', (id) => {
+        log(`Received vc-init-receive from ${id}`)
+
+        addPeer(id, false)
+
+        socket.emit('vc-init-send', id)
+        log(`Sent vc-init-send to ${id}`)
     })
 
-    socket.on('initSend', socket_id => {
-        console.log('INIT SEND ' + socket_id)
-        addPeer(socket_id, true)
+    socket.on('vc-init-send', (id) => {
+        log(`Received vc-init-send from ${id}`)
+
+        addPeer(id, true)
     })
 
-    socket.on('removePeer', socket_id => {
-        console.log('removing peer ' + socket_id)
-        removePeer(socket_id)
+    socket.on('vc-remove', (id) => {
+        removePeer(id)
     })
 
     socket.on('disconnect', () => {
-        console.log('GOT DISCONNECTED')
-        for (let socket_id in peers) {
-            removePeer(socket_id)
+        log(`Peer disconnected`)
+        
+        for (let id in peers) {
+            removePeer(id)
         }
     })
 
-    socket.on('signal', (data) => {
+    socket.on('vc-signal', (data) => {
         peers[data.id].signal(data.signal)
     })
+
+    log('Signals initialized')
 }
 
 function removePeer(id) {
-    return // TODO: remove
-    if (remoteVideo) {
-        let source = remoteVideo.srcObject
-        if (source) {
-            let tracks = source.getTracks();
-            if (tracks) tracks.forEach(track => track.stop())
-            remoteVideo.srcObject = null
-            remoteVideo.parentNode.remove()
-        }
+    log(`Removing peer ${id}`)
+
+    let source = remoteVideo.srcObject
+    if (source) {
+        let tracks = source.getTracks()
+        if (tracks) tracks.forEach(track => track.stop())
+        remoteVideo.srcObject = null
     }
 
     if (peers[id]) peers[id].destroy()
@@ -68,21 +77,31 @@ function removePeer(id) {
 
 function addPeer(id, initiator) {
     peers[id] = new SimplePeer({
-        initiator: initiator,
-        stream: localStream,
-        config: configuration
+        initiator,
+        stream: localStream
     })
 
-    peers[id].on('signal', data => {
-        socket.emit('signal', {
-            id: id,
+    peers[id].on('connect', () => {
+        log(`${id} (${initiator}) connected`)
+    })
+
+    peers[id].on('signal', (data) => {
+        log(`${id} (${initiator}) signaled`)
+
+        socket.emit('vc-signal', {
+            id,
             signal: data
         })
     })
 
-    peers[id].on('stream', stream => {
+    peers[id].on('stream', (stream) => {
+        log(`${id} (${initiator}) streamed`)
+
         remoteVideo.srcObject = stream
+        remoteVideo.playsinline = false
     })
+
+    log(`Peer ${id} added`)
 }
 
 function openPictureMode(e) {
@@ -90,23 +109,20 @@ function openPictureMode(e) {
 }
 
 function toggleMic() {
-    micEnabled = !micEnabled;
+    micEnabled = !micEnabled
     for (let index in localStream.getAudioTracks()) {
         localStream.getAudioTracks()[index].enabled = micEnabled
     }
-    if (micEnabled) $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone');
-    else $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone-slash');
-    console.log(`Microphone ${micEnabled ? 'enabled' : 'disabled'}`);
+    if (micEnabled) $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone')
+    else $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone-slash')
+    log(`Microphone ${micEnabled ? 'enabled' : 'disabled'}`)
 }
 
 $('#mic').on('click', function () {
-    toggleMic();
-});
+    toggleMic()
+})
 
 function initGame() {
-    let game = location.href.match(/([^\/]*)\/*$/)[1]
-    let player = $.cookie('player')
-
     socket.on('game-finished', (status) => {
         $('#gameOverModal').modal('show')
     })
@@ -117,7 +133,13 @@ function initGame() {
 
     socket.on('game-joined', (role) => {
         $('#spinner').hide()
-        console.log(`Player ${player} has role ${role} for game ${game}`)
+        log(`Player ${player} has role ${role} for game ${game}`)
+        if (role === 2) {
+            setTimeout(function() {
+                socket.emit('vc-init')
+                log('Sent vc-init')
+            }, 5000)
+        }
     })
 
     socket.on('init-game-state', (state) => {
@@ -135,6 +157,7 @@ $('#gameOverModal').on('hide.bs.modal', function() {
     return false
 })
 
+// TODO: duplicate #home
 $('#home').on('click', function() {
     $('#gameOverModal').modal('hide')
     location.href = '/'

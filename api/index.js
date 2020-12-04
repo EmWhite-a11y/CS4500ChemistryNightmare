@@ -1,4 +1,4 @@
-const DEBUG = false
+const DEBUG = true
 
 const GameStatus = {
     WAITING: 0,
@@ -160,23 +160,30 @@ const sockets = (io) => {
             updateGameState(io, socket, game, state)
         })
 
-        socket.on('signal', (data) => {
+        socket.on('vc-init', () => {
+            for (let id in clients) {
+                if (id === socket.id) continue
+                console.log(`${id} sending vc-init-receive to ${socket.id}`)
+                clients[id].emit('vc-init-receive', socket.id)
+            }
+        })
+
+        socket.on('vc-init-send', (id) => {
+            console.log(`${socket.id} sending vc-init-send to ${id}`)
+            clients[id].emit('vc-init-send', socket.id)
+        })
+
+        socket.on('vc-signal', (data) => {
             if (!clients[data.id]) return
-            console.log(`Sending signal from ${socket.id} to ${data.id}`)
-            clients[data.id].emit('signal', {
+            log(`Sending vc-signal from ${socket.id} to ${data.id}`)
+            clients[data.id].emit('vc-signal', {
                 id: socket.id,
                 signal: data.signal
             })
         })
 
         socket.on('disconnect', () => {
-            socket.broadcast.emit('removePeer', socket.id)
             disconnect(io, socket)
-        })
-
-        socket.on('initSend', (id) => {
-            console.log(`${socket.id} sending initSend to ${id}`)
-            clients[id].emit('initSend', socket.id)
         })
     })
 }
@@ -187,9 +194,9 @@ function updateGameState(io, socket, game, state) {
 
     games[game].state = state
 
-    if (checkBeakerMatches(game)) endGame(io, game, GameStatus.WON)
-    
     io.to(game).emit('game-state-updated', state)
+
+    if (checkBeakerMatches(game)) endGame(io, game, GameStatus.WON)
 
     log('Updated game-state')
 }
@@ -208,12 +215,6 @@ function connect(io, socket) {
     console.log(`Client ${socket.id} connected`)
 
     clients[socket.id] = socket
-
-    for (let id in clients) {
-        if (id === socket.id) continue
-        console.log(`Sending initReceive to ${socket.id}`)
-        clients[id].emit('initReceive', socket.id)
-    }
 }
 
 function disconnect(io, socket) {
@@ -223,6 +224,8 @@ function disconnect(io, socket) {
     
     let game = findGameFromSocket(socket)
     let player = findPlayerFromSocket(socket)
+
+    socket.to(game).emit('vc-remove', socket.id)
 
     if (player !== null) {
         log(`Player ${player} left game ${game}`)
@@ -425,8 +428,6 @@ function generateInitialGameState() {
 
     return gameState
 }
-
-console.log(JSON.stringify(generateInitialGameState(), null, 4))
 
 function canInitializeGame(game) {
     log('Checking if can initialize game')
