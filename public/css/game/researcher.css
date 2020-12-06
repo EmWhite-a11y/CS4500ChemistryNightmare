@@ -1,0 +1,129 @@
+body {
+    background-image: url('table.png');
+}
+
+
+
+canvas {
+    border: 2px solid #696969;
+    border-radius: 4px 4px 12px 12px;
+    box-shadow: 1px -3px 8px -1px #777 inset;
+}
+
+.row-1:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.column-1 {
+    float: left;
+    width: 33.33%;
+    padding: 5px;
+}
+
+.row-2::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.column-2 {
+    float: left;
+    width: 50%;
+    padding: 5px;
+}
+
+.column-3 {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+}
+
+
+
+
+
+
+
+#parent {
+    max-width: 470px;
+    margin: 0 auto;
+    padding-top: 20px;
+
+}
+
+
+.square {
+    width: 20%;
+    background-color: white;
+    padding-bottom: 12%;
+    float: left;
+    margin: 1.66%;
+}
+
+.label {
+    text-align: center;
+    padding-top: 50px;
+    color: black;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+
+/**Palette Colors**/
+.red {
+    background-color: #FF2712;
+}
+
+.red-orange {
+    background-color: #FF5C0A;
+}
+
+.orange {
+    background-color: #FF881A;
+}
+
+.yellow-orange {
+    background-color: #FCC61A;
+}
+
+.yellow {
+    background-color: #FFF033;
+}
+
+.yellow-green {
+    background-color: #B2D732;
+}
+
+.green {
+    background-color: #66B032;
+}
+
+.blue-green {
+    background-color: #349387;
+}
+
+.blue {
+    background-color: #0247FE;
+}
+
+.blue-violet {
+    background-color: #4424D6;
+}
+
+.violet {
+    background-color: #A622A6;
+}
+
+.red-violet {
+    background-color: #C21460;
+}
+
+.brown {
+    background-color: #B00020;
+}
+
+.hoverable {
+    cursor: pointer;
+}

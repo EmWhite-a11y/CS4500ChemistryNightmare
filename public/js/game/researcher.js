@@ -1,3 +1,5 @@
+
+
 socket.on('game-state-updated', (state) => {
     window.state = state
     log('Updated game-state')
@@ -24,3 +26,26 @@ function drawGameState() {
     $('#chemist-temperature').html(`Temperature: ${window.state.chemist.beaker.temperature}`)
     $('#chemist-pH').html(`pH: ${window.state.chemist.beaker.pH}`)
 }
+
+
+//resize images
+var ruler = document.getElementById('rulerimg');
+
+ruler.width = 50;
+ruler.height = 250;
+
+var therm = 
+document.getElementById('thermimg');
+
+therm.width = 150;
+therm.height = 200;
+
+var ph = 
+document.getElementById('phmeterimg');
+
+ph.width = 100;
+ph.height = 200;
+
+
+ 
+

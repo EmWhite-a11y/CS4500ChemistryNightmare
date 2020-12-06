@@ -27,6 +27,7 @@ block game-content
             div(class='btn-group-vertical')
                 div(id='researcher-pH', class='btn btn-light') pH: 0
     
+     
     h1(class='text-center') Chemist's Beaker
     div(class='d-flex justify-content-center')
         div(class='d-inline-block m-1')
@@ -47,6 +48,50 @@ block game-content
         div(class='d-inline-block m-1')
             div(class='btn-group-vertical')
                 div(id='chemist-pH', class='btn btn-light') pH: 0
+
+    h1(class='text-center') Tools
+    .row-1
+        #ruler.column-1
+            img#rulerimg(src='/images/ruler.png')
+        #thermometer.column-1
+            img#thermimg(src='/images/thermometer.png')
+        #phmeter.column-1
+            img#phmeterimg(src='/images/phmeter.png')
+    .row-2(style='margin-top: 50px')
+        .column-2
+            canvas#beaker-1(width='250' height='250')
+        .column-2
+            canvas#beaker-2(width='250' height='250')   
+        
+      
+
+    h1(class='text-center') Color Palette 
+    #parent
+        .text
+            .square.red.hoverable
+                .label Red
+            .square.red-orange.hoverable
+                .label Red-Orange
+            .square.orange.hoverable
+                .label Orange
+            .square.yellow.hoverable
+                .label Yellow
+            .square.yellow-green.hoverable
+                .label Yellow-Green
+            .square.green.hoverable
+                .label Green
+            .square.blue-green.hoverable
+                .label Blue-Green
+            .square.blue.hoverable
+                .label Blue
+            .square.blue-violet.hoverable
+                .label Blue-Violet
+            .square.violet.hoverable
+                .label Violet
+            .square.red-violet.hoverable
+                .label Red-Violet
+            .square.brown.hoverable
+                .label Error
 
 block game-scripts
     script(src='/js/game/researcher.js')
