@@ -1,0 +1,50 @@
+* {
+    box-sizing: border-box;
+}
+
+.row {
+    align-items: center;
+}
+
+canvas {
+    border: 2px solid #696969;
+    border-radius: 4px 4px 12px 12px;
+    box-shadow: 1px -3px 8px -1px #777 inset
+}
+
+#canvas {
+    align-self: center;
+}
+
+#red,
+#yellow,
+#blue,
+#temperature,
+#pH {
+    background: transparent;
+}
+
+#temperature,
+#pH {
+    width: 400px;
+}
+
+#redCup {
+    background-color: red;
+}
+
+#yellowCup {
+    background-color: yellow;
+}
+
+#blueCup {
+    background-color: blue;
+}
+
+#dryIce {
+    background-color: silver;
+}
+
+#sink {
+    background-color: grey;
+}

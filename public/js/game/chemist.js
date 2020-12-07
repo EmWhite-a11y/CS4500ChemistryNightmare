@@ -107,3 +107,13 @@ function sendBeakerState() {
     window.state.chemist.beaker = beaker
     sendGameState()
 }
+
+var dryIce = document.getElementById("dryIce");
+var dryIceCtx = dryIce.getContext("2d");
+dryIceCtx.font = "16px Arial";
+dryIceCtx.fillText("Dry Ice", 15, 35, 80); 
+
+var sink = document.getElementById("sink");
+var sinkCtx = sink.getContext("2d");
+sinkCtx.font = "16px Arial";
+sinkCtx.fillText("Sink", 50, 35, 150)
