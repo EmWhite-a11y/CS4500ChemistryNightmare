@@ -6,6 +6,9 @@ block game-styles
 block game-content
     img(id='title', src='/images/researcher-title.png')
 
+    div(class='d-block text-center')
+        h3(id='info', class='text-center')
+
     div(class='row no-gutters')
         div(class='col')
             div(id='researcher-beaker-container', class='mx-auto')
@@ -42,17 +45,20 @@ block game-content
             div(id='blue-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Green</em><br>0:1:2')
             div(id='yellow-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow-Green</em><br>0:2:1')
             
-    button(id='read-researcher', class='action-button') Read Researcher
-    button(id='read-chemist', class='action-button') Read Chemist
+    //button(id='read-researcher', class='action-button') Read Researcher
+    //button(id='read-chemist', class='action-button') Read Chemist
     button(id='report-button' class='action-button', data-toggle='modal', data-target='#reportModal') Lab Report
 
     div(id='reportModal', class='modal fade', tabindex='-1')
         div(class='modal-dialog modal-dialog-centered')
-            div(class='modal-content p-3')
+            div(class='modal-content report p-3')
                 div(class='modal-title')
                     h1(class='text-dark text-center') Lab Report
                 div(class='modal-body text-dark')
                     div(class='form-row')
+                        div(class='form-group col-12')
+                            label(class='col-form-label') Volume
+                            input(id='report-volume', class='form-control')
                         div(class='form-group col-4')
                             label(class='col-form-label') Red Ratio
                             input(id='report-red-ratio', class='form-control')

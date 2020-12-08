@@ -36,6 +36,7 @@
 }
 
 .modal-content,
-.modal-body {
+.modal-body,
+.modal-footer {
     border: none !important;
 }

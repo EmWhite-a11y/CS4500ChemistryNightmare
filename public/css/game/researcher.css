@@ -89,6 +89,10 @@ canvas {
 
 
 .modal-content {
+    background-color: transparent !important;
+}
+
+.modal-content.report {
     background-color: #fdfd96 !important;
     border-radius: 5px 5px 5px 5px;
     box-shadow: 0 -2px 8px -4px #111 inset;
@@ -119,7 +123,7 @@ input:visited {
 #color-palette-container {
     display: block;
     width: 100px;
-    margin: 0 auto;
+    margin: 10px auto;
     padding: 5px;
     background-color: black;
 }

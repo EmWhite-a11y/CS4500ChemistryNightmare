@@ -212,10 +212,26 @@ const sockets = (io) => {
 function onSubmitReport(io, socket, game, report) {
     console.log(`Game ${game} report submitted`)
     console.log(report)
+    games[game].report = report
 }
 
 function onPlayerFinished(io, socket, game, player) {
     console.log(`Player ${player} finished game ${game}`)
+    games[game].players[player].finished = true
+    if (checkAllPlayersFinished(game)) {
+        if (checkBeakerMatches(game)) {
+            endGame(io, game, GameStatus.WON, 'Beakers match!')
+        } else {
+            endGame(io, game, GameStatus.LOST, 'Beaker doesn\'t match!')
+        }
+    }
+}
+
+function checkAllPlayersFinished(game) {
+    for (let player in games[game].players) {
+        if (!games[game].players[player].finished) return false
+    }
+    return true
 }
 
 function updateGameState(io, socket, game, state) {
@@ -226,18 +242,18 @@ function updateGameState(io, socket, game, state) {
 
     io.to(game).emit('game-state-updated', state)
 
-    if (checkBeakerMatches(game)) endGame(io, game, GameStatus.WON)
-
     log('Updated game-state')
 }
 
 function checkBeakerMatches(game) {
-    if (games[game].state.researcher.beaker.volume !== games[game].state.chemist.beaker.volume) return false
-    if (games[game].state.researcher.beaker.color.red !== games[game].state.chemist.beaker.color.red) return false
-    if (games[game].state.researcher.beaker.color.yellow !== games[game].state.chemist.beaker.color.yellow) return false
-    if (games[game].state.researcher.beaker.color.blue !== games[game].state.chemist.beaker.color.blue) return false
-    if (games[game].state.researcher.beaker.temperature !== games[game].state.chemist.beaker.temperature) return false
-    if (games[game].state.researcher.beaker.pH !== games[game].state.chemist.beaker.pH) return false
+    console.log(games[game].state.researcher.beaker)
+    console.log(games[game].report)
+    if (games[game].state.researcher.beaker.volume !== games[game].report.volume) return false
+    if (games[game].state.researcher.beaker.color.red !== games[game].report.ratio.red) return false
+    if (games[game].state.researcher.beaker.color.yellow !== games[game].report.ratio.yellow) return false
+    if (games[game].state.researcher.beaker.color.blue !== games[game].report.ratio.blue) return false
+    if (games[game].state.researcher.beaker.temperature !== games[game].report.temperature) return false
+    if (games[game].state.researcher.beaker.pH !== games[game].report.ph) return false
     return true
 }
 
@@ -351,12 +367,12 @@ function findGame(io, socket, player) {
 function updateGameTime(io, socket, game) {
     if (!games[game]) return
     games[game].state.time--
-    if (games[game].state.time === 0) endGame(io, game, GameStatus.LOST)
+    if (games[game].state.time === 0) endGame(io, game, GameStatus.LOST, 'Exceeded time limit!')
     io.in(game).emit('game-state-updated', games[game].state)
 }
 
-function endGame(io, game, status) {
-    io.in(game).emit('game-finished', status)
+function endGame(io, game, status, reason) {
+    io.in(game).emit('game-finished', status, reason)
     if (games[game].timeout) clearInterval(games[game].timeout)
 }
 
@@ -439,9 +455,7 @@ function generateInitialGameState() {
     gameState.researcher.beaker.color.yellow = 0
     gameState.researcher.beaker.color.blue = 0
 
-    let count = Math.random() * 5 + 5
-
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < 3; i++) {
         let choice = getRandomBoolean()
         if (mask & 0b011) {
             if (choice) gameState.researcher.beaker.color.yellow++
