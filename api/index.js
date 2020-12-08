@@ -1,4 +1,4 @@
-const DEBUG = true
+const DEBUG = false
 
 const GameStatus = {
     WAITING: 0,
@@ -173,6 +173,14 @@ const sockets = (io) => {
             updateGameState(io, socket, game, state)
         })
 
+        socket.on('submit-report', (game, report) => {
+            onSubmitReport(io, socket, game, report)
+        })
+
+        socket.on('player-finished', (game, player) => {
+            onPlayerFinished(io, socket, game, player)
+        })
+
         socket.on('vc-init', () => {
             for (let id in clients) {
                 if (id === socket.id) continue
@@ -199,6 +207,15 @@ const sockets = (io) => {
             disconnect(io, socket)
         })
     })
+}
+
+function onSubmitReport(io, socket, game, report) {
+    console.log(`Game ${game} report submitted`)
+    console.log(report)
+}
+
+function onPlayerFinished(io, socket, game, player) {
+    console.log(`Player ${player} finished game ${game}`)
 }
 
 function updateGameState(io, socket, game, state) {
@@ -301,8 +318,8 @@ function findGame(io, socket, player) {
         id: player,
         role,
         ready: false,
-        socket,
-        timeout: null
+        finished: false,
+        socket
     }
 
     log(`Player ${player} created and added to game ${game}`)
@@ -322,18 +339,25 @@ function findGame(io, socket, player) {
             games[game].players[player].socket.emit('found-game', game)
         }
 
-        //games[game].timeout = setTimeout(function() {
-        //    endGame(io, game, GameStatus.LOST)
-        //}, 60 * 1000)
+        games[game].timeout = setInterval(function() {
+            updateGameTime(io, socket, game)
+        }, 1000)
     } else {
         log(`Game ${game} not initialized yet`)
         log(games[game])
     }
 }
 
+function updateGameTime(io, socket, game) {
+    if (!games[game]) return
+    games[game].state.time--
+    if (games[game].state.time === 0) endGame(io, game, GameStatus.LOST)
+    io.in(game).emit('game-state-updated', games[game].state)
+}
+
 function endGame(io, game, status) {
     io.in(game).emit('game-finished', status)
-    //if (games[game].timeout) clearTimeout(games[game].timeout)
+    if (games[game].timeout) clearInterval(games[game].timeout)
 }
 
 function cancelGameSearch(io, socket, player) {
@@ -388,7 +412,8 @@ function findAvailableGame() {
         id: game,
         players: {},
         status: GameStatus.WAITING,
-        state: generateInitialGameState()
+        state: generateInitialGameState(),
+        report: null
     }
 
     log('New game created')
@@ -406,7 +431,7 @@ function generateInitialGameState() {
     gameState.researcher.beaker = researcherBeaker
     gameState.chemist.beaker = chemistBeaker
 
-    gameState.time = 0
+    gameState.time = 60 * 10
     
     let mask = [0b011, 0b101, 0b110][getRandomInterval(0, 2)]
 
@@ -414,7 +439,9 @@ function generateInitialGameState() {
     gameState.researcher.beaker.color.yellow = 0
     gameState.researcher.beaker.color.blue = 0
 
-    for (let i = 0; i < 3; i++) {
+    let count = Math.random() * 5 + 5
+
+    for (let i = 0; i < count; i++) {
         let choice = getRandomBoolean()
         if (mask & 0b011) {
             if (choice) gameState.researcher.beaker.color.yellow++

@@ -7,16 +7,17 @@ let peers = {}
 let localStream = null
 let micEnabled = false
 
-navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: false
-}).then((stream) => {
-    log('Received local stream')
-    localVideo.srcObject = stream
-    localStream = stream
-    log('Local stream ready')
-    initSignals()
-}).catch((error) => alert(`getUserMedia() error: ${error.name}`))
+//navigator.mediaDevices.getUserMedia({
+//    audio: true,
+//    video: false
+//}).then((stream) => {
+//    return
+//    log('Received local stream')
+//    localVideo.srcObject = stream
+//    localStream = stream
+//    log('Local stream ready')
+//    initSignals()
+//}).catch((error) => alert(`getUserMedia() error: ${error.name}`))
 
 function initSignals() {
     socket.on('vc-init-receive', (id) => {
@@ -102,8 +103,14 @@ function openPictureMode(e) {
 
 function toggleMic() {
     micEnabled = !micEnabled
-    for (let index in localStream.getAudioTracks()) {
-        localStream.getAudioTracks()[index].enabled = micEnabled
+    if (localStream) {
+        let audioTracks = localStream.getAudioTracks()
+        if (audioTracks) {
+            for (let index in audioTracks) {
+                let audioTrack = audioTracks[index]
+                if (audioTrack) audioTrack.enabled = micEnabled
+            }
+        }
     }
     if (micEnabled) $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone')
     else $('#mic .fas').removeClass('fa-microphone fa-microphone-slash').addClass('fa-microphone-slash')
@@ -149,7 +156,7 @@ $('#gameOverModal').on('hide.bs.modal', function() {
     return false
 })
 
-// TODO: duplicate #home
+// TODO: remove duplicate #home
 $('#home').on('click', function() {
     $('#gameOverModal').modal('hide')
     location.href = '/'
@@ -167,4 +174,11 @@ function sendGameState() {
 
 $(function () {
     initGame()
+})
+
+socket.on('game-state-updated', (state) => {
+    window.state = state
+    //log('Updated game-state')
+    //log(window.state)
+    drawGameState()
 })

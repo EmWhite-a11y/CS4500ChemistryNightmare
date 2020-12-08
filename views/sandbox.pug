@@ -6,54 +6,23 @@ block styles
 block content
     img(id='title', src='/images/sandbox-title.png')
 
-    div(style='margin: 1em; padding: 1em; background-color: white;')
-        h3(id='test-color-title', class='d-block text-center') Red
-        h5(id='test-color-description', class='d-block text-center') Red: 1, Yellow: 0, Blue: 0
-        div(id='test-square', class='mx-auto', style='width: 100px; height: 100px;')
-    
-    div(class='color-palette')
-        h3(class='d-block text-center') Primary Colors
-        div(class='row my-3')
-            div(class='col-4')
-                h5(class='d-block text-center') Red
-                div(id='color-red', class='mx-auto color-palette-color-area')
-            div(class='col-4')
-                h5(class='d-block text-center text') Yellow
-                div(id='color-yellow', class='mx-auto color-palette-color-area')
-            div(class='col-4')
-                h5(class='d-block text-center text') Blue
-                div(id='color-blue', class='mx-auto color-palette-color-area')
-        h3(class='d-block text-center') Secondary Colors
-        div(class='row my-3')
-            div(class='col-4')
-                h5(class='d-block text-center text') Orange
-                div(id='color-orange', class='mx-auto color-palette-color-area')
-            div(class='col-4')
-                h5(class='d-block text-center text') Green
-                div(id='color-green', class='mx-auto color-palette-color-area')
-            div(class='col-4')
-                h5(class='d-block text-center text') Violet
-                div(id='color-violet', class='mx-auto color-palette-color-area')
-        h3(class='d-block text-center') Tertiary Colors
-        div(class='row my-3')
-            div(class='col-2')
-                h5(class='d-block text-center text') Yellow-Orange
-                div(id='color-yellow-orange', class='mx-auto color-palette-color-area')
-            div(class='col-2')
-                h5(class='d-block text-center text') Red-Orange
-                div(id='color-red-orange', class='mx-auto color-palette-color-area')
-            div(class='col-2')
-                h5(class='d-block text-center text') Red-Violet
-                div(id='color-red-violet', class='mx-auto color-palette-color-area')
-            div(class='col-2')
-                h5(class='d-block text-center text') Blue-Violet
-                div(id='color-blue-violet', class='mx-auto color-palette-color-area')
-            div(class='col-2')
-                h5(class='d-block text-center text') Blue-Green
-                div(id='color-blue-green', class='mx-auto color-palette-color-area')
-            div(class='col-2')
-                h5(class='d-block text-center text') Yellow-Green
-                div(id='color-yellow-green', class='mx-auto color-palette-color-area')
+    div(id='color-palette-container')
+        div(class='color-palette-row')
+            div(id='red', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Red</em><br>1:0:0')
+            div(id='yellow', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow</em><br>0:1:0')
+            div(id='blue', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue</em><br>0:0:1')
+        div(class='color-palette-row')
+            div(id='orange', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Orange</em><br>1:1:0')
+            div(id='green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Green</em><br>0:1:1')
+            div(id='violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Violet</em><br>1:0:1')
+        div(class='color-palette-row')
+            div(id='yellow-orange', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow-Orange</em><br>1:2:0')
+            div(id='red-orange', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Red-Orange</em><br>2:1:0')
+            div(id='red-violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Red-Violet</em><br>1:0:2')
+        div(class='color-palette-row')
+            div(id='blue-violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Violet</em><br>2:0:1')
+            div(id='blue-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Green</em><br>0:1:2')
+            div(id='yellow-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow-Green</em><br>0:2:1')
 
 block scripts
     script(src='/js/sandbox.js')
