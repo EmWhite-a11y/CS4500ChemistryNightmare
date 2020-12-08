@@ -12,13 +12,57 @@ function drawGameState() {
     $('#time').html(`Time: ${minutes}:${seconds}`)
 }
 
-$('#read-researcher').on('click', function() {
-    displayBeaker(window.state.researcher.beaker)
+let activeBeaker = null
+let timeout = null
+
+$('#researcherBeaker').on('click', function() {
+    activeBeaker = this.id
 })
 
-$('#read-chemist').on('click', function() {
-    displayBeaker(window.state.chemist.beaker)
+$('#chemistBeaker').on('click', function() {
+    activeBeaker = this.id
 })
+
+$('#ruler').on('click', function() {
+    if (activeBeaker === null) return
+    if (activeBeaker === 'researcherBeaker') $('#info').html(`Volume: ${window.state.researcher.beaker.volume}`)
+    else if (activeBeaker === 'chemistBeaker') $('#info').html(`Volume: ${window.state.chemist.beaker.volume}`)
+    showInfo()
+    activeBeaker = null
+})
+
+$('#thermometer').on('click', function() {
+    if (activeBeaker === null) return
+    if (activeBeaker === 'researcherBeaker') $('#info').html(`Temperature: ${window.state.researcher.beaker.temperature}`)
+    else if (activeBeaker === 'chemistBeaker') $('#info').html(`Temperature: ${window.state.chemist.beaker.temperature}`)
+    showInfo()
+    activeBeaker = null
+})
+
+$('#phMeter').on('click', function() {
+    if (activeBeaker === null) return
+    if (activeBeaker === 'researcherBeaker') $('#info').html(`pH: ${window.state.researcher.beaker.pH}`)
+    else if (activeBeaker === 'chemistBeaker') $('#info').html(`pH: ${window.state.chemist.beaker.pH}`)
+    showInfo()
+    activeBeaker = null
+})
+
+function showInfo() {
+    console.log('showing info')
+    $('#info').show()
+    setTimeout(function() {
+        console.log('hiding info')
+        $('#info').hide()
+    }, 2 * 1000)
+}
+
+//$('#read-researcher').on('click', function() {
+//    displayBeaker(window.state.researcher.beaker)
+//})
+
+//$('#read-chemist').on('click', function() {
+//    displayBeaker(window.state.chemist.beaker)
+//})
 
 function displayBeaker(beaker) {
     console.log('Displaying beaker')
@@ -35,6 +79,8 @@ function onItemClicked(item) {
 }
 
 function init() {
+    $('#info').hide()
+    
     initBeakers()
     initTools()
 
@@ -304,6 +350,7 @@ let submitted = false
 $('#reportModal').on('hide.bs.modal', function() {
     console.log('hide modal')
 
+    report.volume = parseInt($('#report-volume').val()) || 0
     report.ratio.red = parseInt($('#report-red-ratio').val()) || 0
     report.ratio.yellow = parseInt($('#report-yellow-ratio').val()) || 0
     report.ratio.blue = parseInt($('#report-blue-ratio').val()) || 0

@@ -24,6 +24,7 @@ function drawGameState() {
 
 $('#submit').on('click', function() {
     socket.emit('player-finished', game, player)
+    $('#submit').hide()
 })
 
 

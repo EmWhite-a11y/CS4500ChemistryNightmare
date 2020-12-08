@@ -122,8 +122,11 @@ $('#mic').on('click', function () {
 })
 
 function initGame() {
-    socket.on('game-finished', (status) => {
+    socket.on('game-finished', (status, reason) => {
         $('#gameOverModal').modal('show')
+        if (status === GameStatus.WON) $('#game-over-title').html('Game Won!')
+        else if (status === GameStatus.LOST) $('#game-over-title').html('Game Lost!')
+        $('#game-over-message').html(reason)
     })
 
     socket.on('leave-game', () => {
