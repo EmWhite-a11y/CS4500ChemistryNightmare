@@ -1,50 +1,88 @@
-* {
-    box-sizing: border-box;
+.object {
+    display: block;
 }
 
-.row {
-    align-items: center;
+.interactive {
+    cursor: pointer;
 }
 
 canvas {
-    border: 2px solid #696969;
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -o-crisp-edges;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+#beaker {
+    position: absolute;
+    display: block;
+    width: 80px;
+    height: 120px;
+    bottom: 0;
+    left: 50%;
+    margin-left: calc(-80px / 2);
+    border: 2px solid #333;
     border-radius: 4px 4px 12px 12px;
-    box-shadow: 1px -3px 8px -1px #777 inset
+    box-shadow: 0 -3px 8px -1px #111 inset;
 }
 
-#canvas {
-    align-self: center;
+#hotplate,
+#icebox {
+    position: absolute;
+    display: block;
+    width: 100px;
+    height: 10px;
+    bottom: 0;
+    left: 50%;
+    margin-left: calc(-100px / 2);
+    border: 2px solid #333;
+    border-radius: 4px 4px 12px 12px;
+    box-shadow: 0 1px 5px -1px #111;
 }
 
-#red,
-#yellow,
-#blue,
-#temperature,
-#pH {
-    background: transparent;
+#hotplate {
+    background-color: orangered;
 }
 
-#temperature,
-#pH {
-    width: 400px;
+#icebox {
+    background-color: cyan;
 }
 
-#redCup {
-    background-color: red;
+#redCup,
+#yellowCup,
+#blueCup,
+#acidCup,
+#alkalineCup {
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    bottom: 0;
+    left: 50%;
+    margin-left: calc(-50px / 2);
+    border: 2px solid #333;
+    border-radius: 4px 4px 12px 12px;
+    box-shadow: 0 -3px 8px -1px #111 inset;
 }
 
-#yellowCup {
-    background-color: yellow;
+#hotplate-container,
+#beaker-container,
+#icebox-container {
+    text-align: center;
+    position: relative;
+    width: 200px;
+    height: 200px;
 }
 
-#blueCup {
-    background-color: blue;
-}
-
-#dryIce {
-    background-color: silver;
-}
-
-#sink {
-    background-color: grey;
+#red-cup-container,
+#yellow-cup-container,
+#blue-cup-container,
+#acid-cup-container,
+#alkaline-cup-container {
+    text-align: center;
+    position: relative;
+    width: 100px;
+    height: 100px;
 }

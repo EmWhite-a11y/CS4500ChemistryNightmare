@@ -6,47 +6,72 @@ block game-styles
 block game-content
     img(id='title', src='/images/researcher-title.png')
 
-    h1(class='text-center') Researcher's Beaker
-    div(class='d-flex justify-content-center')
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='researcher-volume', class='btn btn-light') Volume: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='researcher-red', class='btn btn-light') Red: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='researcher-yellow', class='btn btn-light') Yellow: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='researcher-blue', class='btn btn-light') Blue: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='researcher-temperature', class='btn btn-light') Temperature: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='researcher-pH', class='btn btn-light') pH: 0
-    
-    h1(class='text-center') Chemist's Beaker
-    div(class='d-flex justify-content-center')
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='chemist-volume', class='btn btn-light') Volume: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='chemist-red', class='btn btn-light') Red: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='chemist-yellow', class='btn btn-light') Yellow: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='chemist-blue', class='btn btn-light') Blue: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='chemist-temperature', class='btn btn-light') Temperature: 0
-        div(class='d-inline-block m-1')
-            div(class='btn-group-vertical')
-                div(id='chemist-pH', class='btn btn-light') pH: 0
+    div(class='row no-gutters')
+        div(class='col')
+            div(id='researcher-beaker-container', class='mx-auto')
+                canvas(id='researcherBeaker', class='object interactive')
+        div(class='col')
+            div(id='chemist-beaker-container', class='mx-auto')
+                canvas(id='chemistBeaker', class='object interactive')
+    div(class='row no-gutters')
+        div(class='col')
+            div(id='ruler-container', class='mx-auto')
+                canvas(id='ruler', class='object interactive')
+        div(class='col')
+            div(id='thermometer-container', class='mx-auto')
+                canvas(id='thermometer', class='object interactive')
+        div(class='col')
+            div(id='ph-meter-container', class='mx-auto')
+                canvas(id='phMeter', class='object interactive')
+
+    div(id='color-palette-container')
+        div(class='color-palette-row')
+            div(id='red', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Red</em><br>1:0:0')
+            div(id='yellow', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow</em><br>0:1:0')
+            div(id='blue', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue</em><br>0:0:1')
+        div(class='color-palette-row')
+            div(id='orange', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Orange</em><br>1:1:0')
+            div(id='green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Green</em><br>0:1:1')
+            div(id='violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Violet</em><br>1:0:1')
+        div(class='color-palette-row')
+            div(id='yellow-orange', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow-Orange</em><br>1:2:0')
+            div(id='red-orange', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Red-Orange</em><br>2:1:0')
+            div(id='red-violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Red-Violet</em><br>1:0:2')
+        div(class='color-palette-row')
+            div(id='blue-violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Violet</em><br>2:0:1')
+            div(id='blue-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Green</em><br>0:1:2')
+            div(id='yellow-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow-Green</em><br>0:2:1')
+            
+    button(id='read-researcher', class='action-button') Read Researcher
+    button(id='read-chemist', class='action-button') Read Chemist
+    button(id='report-button' class='action-button', data-toggle='modal', data-target='#reportModal') Lab Report
+
+    div(id='reportModal', class='modal fade', tabindex='-1')
+        div(class='modal-dialog modal-dialog-centered')
+            div(class='modal-content p-3')
+                div(class='modal-title')
+                    h1(class='text-dark text-center') Lab Report
+                div(class='modal-body text-dark')
+                    div(class='form-row')
+                        div(class='form-group col-4')
+                            label(class='col-form-label') Red Ratio
+                            input(id='report-red-ratio', class='form-control')
+                        div(class='form-group col-4')
+                            label(class='col-form-label') Yellow Ratio
+                            input(id='report-yellow-ratio', class='form-control')
+                        div(class='form-group col-4')
+                            label(class='col-form-label') Blue Ratio
+                            input(id='report-blue-ratio', class='form-control')
+                    div(class='form-row')
+                        div(class='form-group col-6')
+                            label(class='col-form-label') Temperature
+                            input(id='report-temperature', class='form-control')
+                        div(class='form-group col-6')
+                            label(class='col-form-label') pH
+                            input(id='report-ph', class='form-control')
+                div(class='modal-footer')
+                    button(id='report-close', class='action-button dark', data-dismiss='modal') Close
+                    button(id='report-submit', class='action-button dark', data-dismiss='modal') Turn-In
 
 block game-scripts
     script(src='/js/game/researcher.js')

@@ -4,82 +4,37 @@ block game-styles
     link(rel='stylesheet', href='/css/game/chemist.css')
 
 block game-content
-    div(class='container-fluid')
-        img(id='title', src='/images/chemist-title.png')
-        div(class='container')
-            div(class='row')
-                //tools title
-                img(src="/images/tools.png", alt="Chemist's Tools")
-                div(class='container')
-                    div(class='row')
-                        //color cups and buttons
-                        div(class='d-inline-block m-1')
-                            div(class='d-flex flex-column')
-                                div(class='d-inline-block m-1')
-                                    //red
-                                    div(class='d-inline-block m-1')
-                                        div(id='canvas' class='d-flex justify-content-center')
-                                            canvas#redCup(width='50' height='50')
-                                        div(id='red', class='btn') Red: 0
-                                            div(class='btn-group-horizontal')
-                                                button(id='red-up', class='btn btn-light')
-                                                    i(class='fas fa-arrow-up')
-                                                button(id='red-down', class='btn btn-light')
-                                                    i(class='fas fa-arrow-down')
-                                    //yellow
-                                    div(class='d-inline-block m-1')
-                                        div(id='canvas' class='d-flex justify-content-center')
-                                            canvas#yellowCup(width='50' height='50')
-                                        div(id='yellow', class='btn') Yellow: 0
-                                            div(class='btn-group-horizontal')
-                                                button(id='yellow-up', class='btn btn-light')
-                                                    i(class='fas fa-arrow-up')
-                                                button(id='yellow-down', class='btn btn-light')
-                                                    i(class='fas fa-arrow-down')
-                                    //blue
-                                    div(class='d-inline-block m-1')
-                                        div(id='canvas' class='d-flex justify-content-center')
-                                            canvas#blueCup(width='50' height='50')
-                                        div(id='blue', class='btn') Blue: 0
-                                            div(class='btn-group-horizontal')
-                                                button(id='blue-up', class='btn btn-light')
-                                                    i(class='fas fa-arrow-up')
-                                                button(id='blue-down', class='btn btn-light')
-                                                    i(class='fas fa-arrow-down')
-                                //Temperature Tools
-                                div(class='d-inline-block m-1')
-                                    div(id='temp' class='d-flex justify-content-center')
-                                        img(src="/images/Burner.png", alt="Bunsen Burner")
-                                        div(id='canvas')
-                                            canvas#dryIce(width='80 px' height='50 px')
-                                    div(id='temperature', class='btn') Temperature: 0
-                                        div(class='btn-group-horizontal')
-                                            button(id='temperature-up', class='btn btn-light')
-                                                i(class='fas fa-arrow-up')
-                                            button(id='temperature-down', class='btn btn-light')
-                                                i(class='fas fa-arrow-down')
-                                //Acid/Base Beakers
-                                div(class='d-inline-block m-1')
-                                    div(id='baseBeaker' class='d-flex justify-content-center')
-                                        img(src="/images/Base-Beaker.png", alt="Acid Beaker")
-                                        img(src="/images/Acid-Beaker.png", alt="Base Beaker")
-                                    div(id='pH', class='btn') pH: 0
-                                        div(class='btn-group-horizontal')
-                                            button(id='pH-up', class='btn btn-light')                                                
-                                                i(class='fas fa-arrow-up')
-                                            button(id='pH-down', class='btn btn-light')
-                                                i(class='fas fa-arrow-down')
-                        div(id=RightSide class='d-inline-block m-1')
-                            div(class='d-flex flex-column justify-content-center')
-                                div(class='d-flex justify-content-center')
-                                    div(id='canvas')
-                                        canvas#beaker(width='100' height='120')
-                                div(class='d-flex flex-column justify-content-center')
-                                    //Sink
-                                    canvas#sink(width='150 px' height='50 px')
-                                    div(id='sinklbl' class='btn')
-                                        div(class="btn-group-horizontal")
-                                            button(id='beakerDump', class='btn btn-light') Dump Beaker
+    img(id='title', src='/images/chemist-title.png')
+
+    div(class='row no-gutters')
+        div(class='col')
+            div(id='icebox-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
+                canvas(id='icebox', class='object')
+        div(class='col')
+            div(id='beaker-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
+                canvas(id='beaker', class='object interactive', draggable='true')
+        div(class='col')
+            div(id='hotplate-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
+                canvas(id='hotplate', class='object')
+    div(class='row no-gutters')
+        div(class='col')
+            div(id='red-cup-container', class='mx-auto')
+                canvas(id='redCup', class='object interactive')
+        div(class='col')
+            div(id='yellow-cup-container', class='mx-auto')
+                canvas(id='yellowCup', class='object interactive')
+        div(class='col')
+            div(id='blue-cup-container', class='mx-auto')
+                canvas(id='blueCup', class='object interactive')
+        div(class='col')
+            div(id='acid-cup-container', class='mx-auto')
+                canvas(id='acidCup', class='object interactive')
+        div(class='col')
+            div(id='alkaline-cup-container', class='mx-auto')
+                canvas(id='alkalineCup', class='object interactive')
+        
+        button(id='dump', class='action-button') Dump Beaker
+        button(id='submit', class='action-button') Turn-In
 
 block game-scripts
     script(src='/js/game/chemist.js')
