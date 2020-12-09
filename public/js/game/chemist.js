@@ -82,6 +82,7 @@ function init() {
     initBeaker()
     initColoredCups()
     initPHCups()
+    initBurnerImg()
 }
 
 function draw() {
@@ -152,29 +153,47 @@ function drawColoredCup(canvas, colorType = ColorType.UNKNOWN) {
 }
 
 function initPHCups() {
-    setup(acidCup, 50, 50)
+    setup(acidCup, 75, 87       )
     acidCup.addEventListener('click', function(e) {
         onItemClicked(this)
     })
 
-    setup(alkalineCup, 50, 50)
+    setup(alkalineCup, 75, 87)
     alkalineCup.addEventListener('click', function(e) {
         onItemClicked(this)
     })
 }
 
 function drawPHCups() {
-    drawPHCup(acidCup, 'lightgreen')
-    drawPHCup(alkalineCup, 'lightblue')
+    var acidImage = document.getElementById('acidCupImg')
+    var alkalineImage = document.getElementById('alkalineCupImg')
+    drawPHCup(acidCup, acidImage)
+    drawPHCup(alkalineCup, alkalineImage)
 }
 
 function drawPHCup(canvas, color) {
     let ctx = canvas.getContext('2d')
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.beginPath()
-    ctx.fillStyle = color
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    //ctx.clearRect(0, 0, canvas.width, canvas.height)
+    //ctx.beginPath()
+    //ctx.fillStyle = color
+    //ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(color, 0, 0)
 }
+
+function initBurnerImg() {
+    setup(burnerFlat, 75, 141)
+}
+function drawBurnerImgs() {
+    var image = document.getElementById('burnerFlatLoc')
+    drawBurnerImg(burnerFlat, image)
+}
+
+function drawBurnerImg(canvas, img) {
+    let ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0)
+
+}
+
 
 function setup(canvas, width, height) {
     canvas.width = width
@@ -241,6 +260,7 @@ function drop(ev) {
         redraw()
         if (isOnIcebox || isOnHotPlate) {
             document.getElementById('beaker').style.bottom = '10px'
+            drawBurnerImgs()
         } else {
             document.getElementById('beaker').style.bottom = '0'
         }
