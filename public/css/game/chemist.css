@@ -15,12 +15,17 @@ canvas {
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: -o-crisp-edges;
-    image-rendering: crisp-edges;
+    image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
 }
 
 #tools {
     margin-top: 50px;
+}
+
+h4 {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #beaker {
@@ -58,12 +63,6 @@ canvas {
     background-color: cyan;
 }
 
-#burnerFlat {
-    position: absolute;
-    display: block;
-    margin-left: 65px;
-}
-
 #redCup,
 #yellowCup,
 #blueCup {
@@ -82,15 +81,16 @@ canvas {
 #temp-ctrl-container,
 #tools-title-container,
 #ph-beakers-container,
-#color-cups-container {
+#color-cups-container,
+#acid-label-container,
+#alkalineCup-label-container {
     text-align: center;
     position: relative;
 }
 
 #hotplate-container,
 #beaker-container,
-#icebox-container,
-#burner-flat-container {
+#icebox-container {
     text-align: center;
     position: relative;
     width: 200px;
@@ -105,5 +105,13 @@ canvas {
     text-align: center;
     position: relative;
     width: 100px;
-    height: 100px;
+    height: 200px;
+}
+
+#acidCup,
+#alkalineCup {
+    position: absolute;
+    display: block;
+    margin-left: calc((100px - 75px) / 2);
+    bottom: 0;
 }

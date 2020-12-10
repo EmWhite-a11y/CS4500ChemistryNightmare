@@ -82,7 +82,6 @@ function init() {
     initBeaker()
     initColoredCups()
     initPHCups()
-    initBurnerImg()
 }
 
 function draw() {
@@ -171,29 +170,14 @@ function drawPHCups() {
     drawPHCup(alkalineCup, alkalineImage)
 }
 
-function drawPHCup(canvas, color) {
+function drawPHCup(canvas, img) {
     let ctx = canvas.getContext('2d')
-    //ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     //ctx.beginPath()
     //ctx.fillStyle = color
     //ctx.fillRect(0, 0, canvas.width, canvas.height)
-    ctx.drawImage(color, 0, 0)
-}
-
-function initBurnerImg() {
-    setup(burnerFlat, 75, 141)
-}
-function drawBurnerImgs() {
-    var image = document.getElementById('burnerFlatLoc')
-    drawBurnerImg(burnerFlat, image)
-}
-
-function drawBurnerImg(canvas, img) {
-    let ctx = canvas.getContext('2d')
     ctx.drawImage(img, 0, 0)
-
 }
-
 
 function setup(canvas, width, height) {
     canvas.width = width
@@ -260,7 +244,6 @@ function drop(ev) {
         redraw()
         if (isOnIcebox || isOnHotPlate) {
             document.getElementById('beaker').style.bottom = '10px'
-            drawBurnerImgs()
         } else {
             document.getElementById('beaker').style.bottom = '0'
         }
