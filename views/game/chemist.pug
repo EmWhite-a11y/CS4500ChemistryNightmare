@@ -6,35 +6,72 @@ block game-styles
 block game-content
     img(id='title', src='/images/chemist-title.png')
 
-    div(class='row no-gutters')
+    div(id='tools', class='col')
+        div(id='tools-title-container', class='mx-auto')
+            img(src='/images/Tools.png', alt="Tools Title")  
+        div(class='row no-gutters')
+            div(class='col')
+                div(id='color-cups-container', class='mx-auto')
+                    div(class='row no-gutters')
+                        div(class='col')
+                            div(id='red-cup-container', class='mx-auto')
+                                canvas(id='redCup', class='object interactive')
+                            div(id='redCup-label-container', class='mx-auto')
+                                h6(id='redCup-label') Red Coloring
+                        div(class='col')
+                            div(id='yellow-cup-container', class='mx-auto')
+                                canvas(id='yellowCup', class='object interactive')
+                            div(id='yellowCup-label-container', class='mx-auto')
+                                h6(id='yellowCup-label') Yellow Coloring
+                        div(class='col')
+                            div(id='blue-cup-container', class='mx-auto')
+                                canvas(id='blueCup', class='object interactive')
+                            div(id='blueCup-label-container', class='mx-auto')
+                                h6(id='blueCup-label') Blue Coloring
+                div(id='colorTools-title-container' class='mx-auto')
+                    h4(id='colorTools', class='text-align-center') Color Controls
+            div(class='col')
+                div(id='ph-beakers-container')
+                    div(class='row no-gutters')
+                        div(class='col')
+                            div(id='acid-cup-container', class='mx-auto')
+                                canvas(id='acidCup', class='object interactive')
+                                img(id='acidCupImg', src='/images/Acid-Beaker.png' class='hidden')
+                            div(id='acid-label-container', class='mx-auto')
+                                h6(id='acidCup-label') Acid Beaker
+                        div(class='col')
+                            div(id='alkaline-cup-container', class='mx-auto')
+                                canvas(id='alkalineCup', class='object interactive')
+                                img(id='alkalineCupImg', src='/images/Base-Beaker.png' class='hidden')
+                            div(id='alkalineCup-label-container', class='mx-auto')
+                                h6(id='alkalineCup-label') Base Beaker
+                div(id='phTools-title-container' class='mx-auto')
+                    h4(id='phTools') pH Controls
+            div(class='col')
+                div(id='temp-ctrl-container', class='mx-auto')
+                    div(class='row no-gutters')
+                        div(class='col')
+                            div(id='icebox-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
+                                canvas(id='icebox', class='object')
+                            div(id='icebox-label-container', class='mx-auto')
+                                h6(id='icebox-label') Icebox
+                        div(class='col')
+                            div(id='hotplate-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
+                                canvas(id='hotplate', class='object')
+                            div(id='hotplate-label-container', class='mx-auto')
+                                h6(id='hotplate-label') Hotplate
+                div(id='tempCtrl-title-container', class='mx-auto')
+                    h4(id='tempCtrl') Temperature Controls
+
+    div(class='col')
+        div(id='beaker-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
+            canvas(id='beaker', class='object interactive', draggable='true')
+    div(class='row no-gutter')
+        div(id='btn-container', class='mx-auto')
         div(class='col')
-            div(id='icebox-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
-                canvas(id='icebox', class='object')
+            button(id='submit', class='action-button') Turn-In
         div(class='col')
-            div(id='beaker-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
-                canvas(id='beaker', class='object interactive', draggable='true')
-        div(class='col')
-            div(id='hotplate-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
-                canvas(id='hotplate', class='object')
-    div(class='row no-gutters')
-        div(class='col')
-            div(id='red-cup-container', class='mx-auto')
-                canvas(id='redCup', class='object interactive')
-        div(class='col')
-            div(id='yellow-cup-container', class='mx-auto')
-                canvas(id='yellowCup', class='object interactive')
-        div(class='col')
-            div(id='blue-cup-container', class='mx-auto')
-                canvas(id='blueCup', class='object interactive')
-        div(class='col')
-            div(id='acid-cup-container', class='mx-auto')
-                canvas(id='acidCup', class='object interactive')
-        div(class='col')
-            div(id='alkaline-cup-container', class='mx-auto')
-                canvas(id='alkalineCup', class='object interactive')
-        
-    button(id='dump', class='action-button') Dump Beaker
-    button(id='submit', class='action-button') Turn-In
+            button(id='dump', class='action-button') Dump Beaker
 
 block game-scripts
     script(src='/js/game/chemist.js')

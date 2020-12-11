@@ -2,6 +2,10 @@
     display: block;
 }
 
+.hidden {
+    display: none;
+}
+
 .interactive {
     cursor: pointer;
 }
@@ -13,6 +17,23 @@ canvas {
     image-rendering: -o-crisp-edges;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
+}
+
+#tools {
+    margin-top: 20px;
+}
+
+h6 {
+    font-family: arial, sans-serif;
+    font-style: italic;
+    color: white;
+}
+
+h4 {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    font-family: "arial black", arial, sans-serif;
+    font-style: oblique;
 }
 
 #beaker {
@@ -52,9 +73,7 @@ canvas {
 
 #redCup,
 #yellowCup,
-#blueCup,
-#acidCup,
-#alkalineCup {
+#blueCup {
     position: absolute;
     display: block;
     width: 50px;
@@ -65,6 +84,19 @@ canvas {
     border: 2px solid #333;
     border-radius: 4px 4px 12px 12px;
     box-shadow: 0 -3px 8px -1px #111 inset;
+}
+
+#temp-ctrl-container,
+#tools-title-container,
+#ph-beakers-container,
+#color-cups-container,
+#acid-label-container,
+#alkalineCup-label-container,
+#tempCtrl-title-container,
+#phTools-title-container,
+#colorTools-title-container {
+    text-align: center;
+    position: relative;
 }
 
 #hotplate-container,
@@ -84,5 +116,13 @@ canvas {
     text-align: center;
     position: relative;
     width: 100px;
-    height: 100px;
+    height: 200px;
+}
+
+#acidCup,
+#alkalineCup {
+    position: absolute;
+    display: block;
+    margin-left: calc((100px - 75px) / 2);
+    bottom: 0;
 }

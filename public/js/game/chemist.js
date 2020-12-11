@@ -152,28 +152,31 @@ function drawColoredCup(canvas, colorType = ColorType.UNKNOWN) {
 }
 
 function initPHCups() {
-    setup(acidCup, 50, 50)
+    setup(acidCup, 75, 87       )
     acidCup.addEventListener('click', function(e) {
         onItemClicked(this)
     })
 
-    setup(alkalineCup, 50, 50)
+    setup(alkalineCup, 75, 87)
     alkalineCup.addEventListener('click', function(e) {
         onItemClicked(this)
     })
 }
 
 function drawPHCups() {
-    drawPHCup(acidCup, 'lightgreen')
-    drawPHCup(alkalineCup, 'lightblue')
+    var acidImage = document.getElementById('acidCupImg')
+    var alkalineImage = document.getElementById('alkalineCupImg')
+    drawPHCup(acidCup, acidImage)
+    drawPHCup(alkalineCup, alkalineImage)
 }
 
-function drawPHCup(canvas, color) {
+function drawPHCup(canvas, img) {
     let ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.beginPath()
-    ctx.fillStyle = color
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    //ctx.beginPath()
+    //ctx.fillStyle = color
+    //ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(img, 0, 0)
 }
 
 function setup(canvas, width, height) {
