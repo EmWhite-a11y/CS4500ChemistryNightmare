@@ -1,4 +1,4 @@
-# CS4500ChemistryNightmare
+# Chemistry Nightmare
 A project for a class!
 
 ## Description
