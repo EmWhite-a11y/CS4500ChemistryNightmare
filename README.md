@@ -1,5 +1,5 @@
 # CS4500ChemistryNightmare
-A project for a class
+A project for a class!
 
 ## Description
 ### Platform
@@ -10,9 +10,22 @@ Players begin on the main page. Registration is not required, so players will no
 Our interaction mechanic is a two-click process. The first item clicked will interact with the second item clicked, but only if the second item can be interacted with using the first item. For example, clicking a tool, then the beaker is a legal interaction, but clicking a tool with another tool is not. The player’s beaker and tools will be visible on the screen. To communicate, a player can use either a textbox to send messages or toggle a button to enable and disable voice.
 
 ## Build
-To run the application:
+Runs the application in
+development mode on port 5000.
 ```
 npm run start:dev
 ```
 
 ## Test
+### Prerequisites
+Browsers:
+- Chrome 80+
+- Firefox 80+
+
+1. Open both Chrome and Firefox and navigate to http://localhost:5000.
+2. Click the play button on both browsers.
+3. Play the game until the chemist's beaker matches the researcher's.
+4. Fill out the researcher's report.
+5. Have both players "turn-in".
+6. Be presented with a game over screen saying that both beaker's match.
+7. Return to the home page.
