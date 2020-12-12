@@ -30,3 +30,12 @@ npm run start:dev
 5. Have both players "turn-in".
 6. Be presented with a game over screen saying that both beaker's match.
 7. Return to the home page.
+Note: For best experience, use 1300×800 screen resolution
+
+## Issues
+- Voice chat doesn't always connect
+- Game cannot find game if trying to test game on same browser
+
+## Troubleshooting
+- If the application crashes, clear browser cookies and restart the server.
+- If something is expected to happen, restart the server.
