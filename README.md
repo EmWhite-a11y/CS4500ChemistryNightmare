@@ -37,7 +37,7 @@ Note: For best experience, use 1300×800 screen resolution.
 
 ## Issues
 - Voice chat doesn't always connect
-- Game cannot find game if trying to test game on same browser
+- Game-searching may break if using same browser for testing
 
 ## Troubleshooting
 - If the application crashes, clear browser cookies and restart the server.
