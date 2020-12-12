@@ -1,7 +1,10 @@
+// Source: https://github.com/Dirvann/webrtc-video-conference-simple-peer
+
 let peers = {}
 let localStream = null
 let micEnabled = false
 
+// Initialize voice stream
 navigator.mediaDevices.getUserMedia({
     audio: true,
     video: false
@@ -13,6 +16,7 @@ navigator.mediaDevices.getUserMedia({
     initSignals()
 }).catch((error) => alert(`getUserMedia() error: ${error.name}`))
 
+// Initializes voice stream signals
 function initSignals() {
     socket.on('vc-init-receive', (id) => {
         log(`Received vc-init-receive from ${id}`)
@@ -48,6 +52,7 @@ function initSignals() {
     log('Signals initialized')
 }
 
+// Removes a peer connection
 function removePeer(id) {
     log(`Removing peer ${id}`)
 
@@ -62,6 +67,7 @@ function removePeer(id) {
     delete peers[id]
 }
 
+// Adds a peer connection
 function addPeer(id, initiator) {
     peers[id] = new SimplePeer({
         initiator,
@@ -91,10 +97,7 @@ function addPeer(id, initiator) {
     log(`Peer ${id} added`)
 }
 
-function openPictureMode(e) {
-    e.requestPictureInPicture()
-}
-
+// Toggles microphone
 function toggleMic() {
     micEnabled = !micEnabled
     if (localStream) {
@@ -111,6 +114,7 @@ function toggleMic() {
     log(`Microphone ${micEnabled ? 'enabled' : 'disabled'}`)
 }
 
+// Handler for when microphone button is clicked
 $('#mic').on('click', function () {
     toggleMic()
 })

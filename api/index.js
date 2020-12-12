@@ -14,6 +14,7 @@ const PlayerRole = {
     RESEARCHER: 2
 }
 
+// Game state object template
 const stateTemplate = {
     time: null,
     researcher: {
@@ -24,6 +25,7 @@ const stateTemplate = {
     }
 }
 
+// Beaker object template
 const beakerTemplate = {
     volume: null,
     color: {
@@ -64,6 +66,7 @@ let generateGame = (function () {
     }
 })()
 
+// Set up Express routes
 const routes = (app) => {
     // Middleware to assign a user a session
     app.use((req, res, next) => {
@@ -140,47 +143,61 @@ const routes = (app) => {
     })
 }
 
+// Set up Socket.IO connection handlers
 const sockets = (io) => {
+    // Initialize socket handlers
     io.on('connection', (socket) => {
+        // Handle when a connection is created
         connect(io, socket)
 
+        // Used when a player wants to find a game
         socket.on('find-game', (player) => {
             findGame(io, socket, player)
         })
 
+        // Used when a player wants to cancel a search for a game
         socket.on('cancel-game-search', (player) => {
             cancelGameSearch(io, socket, player)
         })
 
+        // Used when a player wants to join a game
         socket.on('join-game', (game, player) => {
             joinGame(io, socket, game, player)
         })
 
+        // Used when a player updates the game state
         socket.on('update-game-state', (game, state) => {
             updateGameState(io, socket, game, state)
         })
 
+        // Used when the report is submitted
         socket.on('submit-report', (game, report) => {
             onSubmitReport(io, socket, game, report)
         })
 
+        // Used when a player is finished
         socket.on('player-finished', (game, player) => {
             onPlayerFinished(io, socket, game, player)
         })
 
+        // Used to connect all clients to voice chat
         socket.on('vc-init', () => {
             for (let id in clients) {
+                // Don't send to ourselves
                 if (id === socket.id) continue
                 log(`${id} sending vc-init-receive to ${socket.id}`)
+                // "ping" clients
                 clients[id].emit('vc-init-receive', socket.id)
             }
         })
 
+        // Used as a "pong" back to pinger
         socket.on('vc-init-send', (id) => {
             log(`${socket.id} sending vc-init-send to ${id}`)
             clients[id].emit('vc-init-send', socket.id)
         })
 
+        // Used to signal between voice chat clients
         socket.on('vc-signal', (data) => {
             if (!clients[data.id]) return
             log(`Sending vc-signal from ${socket.id} to ${data.id}`)
@@ -190,18 +207,21 @@ const sockets = (io) => {
             })
         })
 
+        // Used when a connection is lost
         socket.on('disconnect', () => {
             disconnect(io, socket)
         })
     })
 }
 
+// Handles report submission
 function onSubmitReport(io, socket, game, report) {
     log(`Game ${game} report submitted`)
     log(report)
     games[game].report = report
 }
 
+// Checks to end the game if player finishes
 function onPlayerFinished(io, socket, game, player) {
     log(`Player ${player} finished game ${game}`)
     games[game].players[player].finished = true
@@ -214,6 +234,7 @@ function onPlayerFinished(io, socket, game, player) {
     }
 }
 
+// Checks if all players in a game are finished
 function checkAllPlayersFinished(game) {
     for (let player in games[game].players) {
         if (!games[game].players[player].finished) return false
@@ -221,47 +242,46 @@ function checkAllPlayersFinished(game) {
     return true
 }
 
+// Handles when a game state is updated
 function updateGameState(io, socket, game, state) {
     log('Updating game-state')
     log(state)
-
     games[game].state = state
-
     io.to(game).emit('game-state-updated', state)
-
     log('Updated game-state')
 }
 
+// Checks if chemist's beaker matches report
 function checkBeakerMatches(game) {
-    if (games[game].state.researcher.beaker.volume !== games[game].report.volume) return false
-    if (games[game].state.researcher.beaker.color.red !== games[game].report.ratio.red) return false
-    if (games[game].state.researcher.beaker.color.yellow !== games[game].report.ratio.yellow) return false
-    if (games[game].state.researcher.beaker.color.blue !== games[game].report.ratio.blue) return false
-    if (games[game].state.researcher.beaker.temperature !== games[game].report.temperature) return false
-    if (games[game].state.researcher.beaker.pH !== games[game].report.ph) return false
+    if (games[game].state.chemist.beaker.volume !== games[game].report.volume) return false
+    if (games[game].state.chemist.beaker.color.red !== games[game].report.ratio.red) return false
+    if (games[game].state.chemist.beaker.color.yellow !== games[game].report.ratio.yellow) return false
+    if (games[game].state.chemist.beaker.color.blue !== games[game].report.ratio.blue) return false
+    if (games[game].state.chemist.beaker.temperature !== games[game].report.temperature) return false
+    if (games[game].state.chemist.beaker.pH !== games[game].report.ph) return false
     return true
 }
 
+// Handles socket connections
 function connect(io, socket) {
     log(`Client ${socket.id} connected`)
 
+    // Store socket
     clients[socket.id] = socket
 }
 
+// Handles socket disconnections
 function disconnect(io, socket) {
     log(`Client ${socket.id} disconnected`)
     
+    // Delete socket
     delete clients[socket.id]
     
+    // Tries to clean up a game
     let game = findGameFromSocket(socket)
     let player = findPlayerFromSocket(socket)
-
     socket.to(game).emit('vc-remove', socket.id)
-
-    if (player !== null) {
-        log(`Player ${player} left game ${game}`)
-    }
-    
+    if (player !== null) log(`Player ${player} left game ${game}`)
     if (game !== null) {
         if (games[game].status === GameStatus.STARTED) {
             log(`Game ${game} ending`)
@@ -279,6 +299,7 @@ function disconnect(io, socket) {
     }
 }
 
+// Returns a game using a socket
 function findGameFromSocket(socket) {
     for (let game in games) {
         for (let player in games[game].players) {
@@ -288,6 +309,7 @@ function findGameFromSocket(socket) {
     return null
 }
 
+// Returns a player using a socket
 function findPlayerFromSocket(socket) {
     for (let game in games) {
         for (let player in games[game].players) {
@@ -297,6 +319,7 @@ function findPlayerFromSocket(socket) {
     return null
 }
 
+// Finds a game for a player and tries to start it
 function findGame(io, socket, player) {
     log(`Player ${player} finding game`)
 
@@ -349,6 +372,7 @@ function findGame(io, socket, player) {
     }
 }
 
+// Updates game time and sends to all connected
 function updateGameTime(io, socket, game) {
     if (!games[game]) return
     games[game].state.time--
@@ -356,11 +380,13 @@ function updateGameTime(io, socket, game) {
     io.in(game).emit('game-state-updated', games[game].state)
 }
 
+// Ends game and sends to all connected
 function endGame(io, game, status, reason) {
     io.in(game).emit('game-finished', status, reason)
     if (games[game].timeout) clearInterval(games[game].timeout)
 }
 
+// Cancels a player's game search
 function cancelGameSearch(io, socket, player) {
     socket.emit('game-search-cancelled')
     for (let game in games) {
@@ -370,6 +396,7 @@ function cancelGameSearch(io, socket, player) {
     }
 }
 
+// Joins a player to a game
 function joinGame(io, socket, game, player) {
     log(`Player ${player} joining game`)
 
@@ -397,6 +424,7 @@ function joinGame(io, socket, game, player) {
     }
 }
 
+// Finds a game that is waiting to be started
 function findAvailableGame() {
     log('Finding an available game')
     
@@ -424,22 +452,23 @@ function findAvailableGame() {
     return game
 }
 
+// Creates a state for a new game
 function generateInitialGameState() {
+    // Initialize empty game state
     let gameState = JSON.parse(JSON.stringify(stateTemplate))
     let researcherBeaker = JSON.parse(JSON.stringify(beakerTemplate))
     let chemistBeaker = JSON.parse(JSON.stringify(beakerTemplate))
-
     gameState.researcher.beaker = researcherBeaker
     gameState.chemist.beaker = chemistBeaker
 
-    gameState.time = 60 * 10
+    // Set default time
+    gameState.time = 60 * 10 // 10 minutes
     
-    let mask = [0b011, 0b101, 0b110][getRandomInterval(0, 2)]
-
+    // Create researcher's random beaker
     gameState.researcher.beaker.color.red = 0
     gameState.researcher.beaker.color.yellow = 0
     gameState.researcher.beaker.color.blue = 0
-
+    let mask = [0b011, 0b101, 0b110][getRandomInterval(0, 2)]
     for (let i = 0; i < 3; i++) {
         let choice = getRandomBoolean()
         if (mask & 0b011) {
@@ -454,10 +483,10 @@ function generateInitialGameState() {
         }
         gameState.researcher.beaker.volume++
     }
-
     gameState.researcher.beaker.temperature = getRandomInterval(10, 30)
     gameState.researcher.beaker.pH = getRandomInterval(0, 14)
 
+    // Create chemist's empty beaker
     gameState.chemist.beaker.volume = 0
     gameState.chemist.beaker.color.red = 0
     gameState.chemist.beaker.color.yellow = 0
@@ -468,6 +497,7 @@ function generateInitialGameState() {
     return gameState
 }
 
+// Checks if all needed players exist in a game
 function canInitializeGame(game) {
     log('Checking if can initialize game')
     
@@ -490,6 +520,7 @@ function canInitializeGame(game) {
     return true
 }
 
+// Checks if a game has a particular player
 function roleExists(game, role) {
     for (let player in games[game].players) {
         if (games[game].players[player].role == role) return true
@@ -497,6 +528,7 @@ function roleExists(game, role) {
     return false
 }
 
+// Checks if all players are ready
 function canStartGame(game) {
     for (let player in games[game].players) {
         if (!isPlayablePlayer(game, player)) continue
@@ -506,6 +538,7 @@ function canStartGame(game) {
     return true
 }
 
+// Checks if player is assigned a game role
 function isPlayablePlayer(game, player) {
     let role = games[game].players[player].role
     return role == PlayerRole.CHEMIST || role == PlayerRole.RESEARCHER
