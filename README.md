@@ -16,11 +16,13 @@ Our interaction mechanic is a two-click process. The first item clicked will int
 - Firefox 80+
 
 ## Build
-Runs the application in
-development mode on port 5000.
+From the root directory of
+the project, run the command:
 ```
 npm run start:dev
 ```
+This runs the application in
+development mode on port 5000.
 
 ## Test
 1. Open both Chrome and Firefox and navigate to http://localhost:5000.
