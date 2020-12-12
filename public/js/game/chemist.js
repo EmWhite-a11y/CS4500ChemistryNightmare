@@ -194,7 +194,6 @@ function drop(ev) {
     if (currentContainer !== null) {
         isOnIcebox = currentContainer.id === 'icebox-container'
         isOnHotPlate = currentContainer.id === 'hotplate-container'
-        redraw()
         if (isOnIcebox || isOnHotPlate) {
             document.getElementById('beaker').style.bottom = '10px'
         } else {
