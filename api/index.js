@@ -226,7 +226,7 @@ function onPlayerFinished(io, socket, game, player) {
     log(`Player ${player} finished game ${game}`)
     games[game].players[player].finished = true
     if (checkAllPlayersFinished(game)) {
-        if (checkBeakerMatches(game)) {
+        if (checkBeakerMatchesReport(game)) {
             endGame(io, game, GameStatus.WON, 'Beakers match!')
         } else {
             endGame(io, game, GameStatus.LOST, 'Beaker doesn\'t match!')
@@ -252,7 +252,7 @@ function updateGameState(io, socket, game, state) {
 }
 
 // Checks if chemist's beaker matches report
-function checkBeakerMatches(game) {
+function checkBeakerMatchesReport(game) {
     if (games[game].state.chemist.beaker.volume !== games[game].report.volume) return false
     if (games[game].state.chemist.beaker.color.red !== games[game].report.ratio.red) return false
     if (games[game].state.chemist.beaker.color.yellow !== games[game].report.ratio.yellow) return false
@@ -262,7 +262,7 @@ function checkBeakerMatches(game) {
     return true
 }
 
-// Handles socket connections
+// Handle socket connection
 function connect(io, socket) {
     log(`Client ${socket.id} connected`)
 
@@ -270,7 +270,7 @@ function connect(io, socket) {
     clients[socket.id] = socket
 }
 
-// Handles socket disconnections
+// Handle socket disconnection
 function disconnect(io, socket) {
     log(`Client ${socket.id} disconnected`)
     
