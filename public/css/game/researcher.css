@@ -1,5 +1,8 @@
+@import url('http://fonts.cdnfonts.com/css/karmatic-arcade');
+
+
 .object {
-    display: block;
+    display: hidden;
 }
 
 .interactive {
@@ -13,6 +16,52 @@ canvas {
     image-rendering: -o-crisp-edges;
     image-rendering: pixelated;
     -ms-interpolation-mode: nearest-neighbor;
+}
+
+h6 {
+    font-family: 'Karmatic Arcade', sans-serif;
+    /**font-style: italic, bold;**/
+
+}
+
+#temp-label-container,
+#volume-label-container,
+#ph-label-container,
+#beaker-label-container,
+#palette-label-container {
+    text-align: center;
+    position: relative;
+}
+
+#ruler-container,
+#thermometer-container,
+#ph-meter-container {
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    position: relative;
+}
+
+#ruler {
+    width: 25px;
+    height: 100px;
+    min-height: 100px;
+    min-width: 25px;
+    border: 2px solid #333;
+}
+
+#phMeter {
+    width: 60px;
+    height: 100px;
+    min-height: 100px;
+    min-width: 60px;
+}
+
+#thermometer {
+    width: 70px;
+    height: 100px;
+    min-height: 100px;
+    min-width: 70px;
 }
 
 #researcherBeaker,
@@ -29,45 +78,6 @@ canvas {
     box-shadow: 0 -3px 8px -1px #111 inset;
 }
 
-#ruler {
-    position: absolute;
-    display: block;
-    width: 20px;
-    height: 120px;
-    bottom: 0;
-    left: 50%;
-    margin-left: calc(-20px / 2);
-    border: 2px solid #333;
-    border-radius: 4px 4px 4px 4px;
-    box-shadow: 0 -1px 2px -1px #111 inset;
-}
-
-#thermometer {
-    position: absolute;
-    display: block;
-    width: 10px;
-    height: 120px;
-    bottom: 0;
-    left: 50%;
-    margin-left: calc(-10px / 2);
-    border: 2px solid 'rgba(0.5, 0.5, 0.5, 0.5)';
-    border-radius: 4px 4px 4px 4px;
-    box-shadow: 0 -1px 2px -1px #111 inset;
-}
-
-#phMeter {
-    position: absolute;
-    display: block;
-    width: 40px;
-    height: 120px;
-    bottom: 0;
-    left: 50%;
-    margin-left: calc(-40px / 2);
-    border: 2px solid #333;
-    border-radius: 12px 12px 12px 12px;
-    box-shadow: 0 -3px 3px -3px #111 inset;
-}
-
 #researcher-beaker-container,
 #chemist-beaker-container {
     text-align: center;
@@ -75,17 +85,6 @@ canvas {
     width: 200px;
     height: 200px;
 }
-
-#ruler-container,
-#thermometer-container,
-#phMeter-container {
-    text-align: center;
-    position: relative;
-    width: 100px;
-    height: 100px;
-}
-
-
 
 
 .modal-content {

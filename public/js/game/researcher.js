@@ -97,7 +97,6 @@ function init() {
 
 function draw() {
     drawBeakers()
-    drawTools()
 }
 function initBeakers() {
     setup(researcherBeaker, 80, 120)
@@ -159,36 +158,6 @@ function initTools() {
     phMeter.addEventListener('click', function(e) {
         onItemClicked(this)
     })
-}
-
-function drawTools() {
-    drawRuler(ruler)
-    drawThermometer(thermometer)
-    drawPHMeter(phMeter)
-}
-
-function drawRuler(canvas) {
-    let ctx = canvas.getContext('2d')
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.beginPath()
-    ctx.fillStyle = '#deb887'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-}
-
-function drawThermometer(canvas) {
-    let ctx = canvas.getContext('2d')
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.beginPath()
-    ctx.fillStyle = 'rgba(0.5, 0.5, 0.5, 0.5)'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-}
-
-function drawPHMeter(canvas) {
-    let ctx = canvas.getContext('2d')
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.beginPath()
-    ctx.fillStyle = '#333'
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
 }
 
 function setup(canvas, width, height) {
