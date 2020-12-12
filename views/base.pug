@@ -10,15 +10,17 @@ html(lang='')
         link(rel='stylesheet', href='/css/base.css')
         block styles
     
-    body.background
-        .container-fluid.my-5
+    body(class='background')
+        div(class='container-fluid my-5')
             block content
         
         div(id='spinner')
             div(class='d-flex justify-content-center')
                 div(class='spinner-border ml-auto')
 
-        include partials/footer
+        footer
+            div(class='container text-center')
+                small(class='text-white') &#169; 2020 Null Pointers
         
         script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js')
