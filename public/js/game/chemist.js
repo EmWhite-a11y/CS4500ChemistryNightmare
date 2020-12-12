@@ -1,4 +1,5 @@
-$('#dump').on('click', function() {
+// Handler for when the dump button is clicked
+$('#dump').on('click', function () {
     window.state.chemist.beaker.volume = 0
     window.state.chemist.beaker.color.red = 0
     window.state.chemist.beaker.color.yellow = 0
@@ -22,26 +23,15 @@ function drawGameState() {
     $('#time').html(`Time: ${minutes}:${seconds}`)
 }
 
-$('#submit').on('click', function() {
+$('#submit').on('click', function () {
     socket.emit('player-finished', game, player)
     $('#submit').hide()
 })
 
-
-
-const VOLUME_MAX = 10
-
-
-
-
-
-
-
 function onItemClicked(item) {
-    console.log(`${item.id} clicked`)
+    log(`${item.id} clicked`)
     if (isOnIcebox || isOnHotPlate) return
     if (item.id === 'beaker') {
-        console.log('emptying beaker into sink')
         window.state.chemist.beaker.volume = 0
         window.state.chemist.beaker.color.red = 0
         window.state.chemist.beaker.color.yellow = 0
@@ -49,22 +39,17 @@ function onItemClicked(item) {
         window.state.chemist.beaker.temperature = 0
         window.state.chemist.beaker.pH = 0
     } else if (item.id === 'redCup') {
-        console.log('redCup used on beaker')
         window.state.chemist.beaker.volume++
         window.state.chemist.beaker.color.red++
     } else if (item.id === 'yellowCup') {
-        console.log('yellowCup used on beaker')
         window.state.chemist.beaker.volume++
         window.state.chemist.beaker.color.yellow++
     } else if (item.id === 'blueCup') {
-        console.log('blueCup used on beaker')
         window.state.chemist.beaker.volume++
         window.state.chemist.beaker.color.blue++
     } else if (item.id === 'acidCup') {
-        console.log('acidCup used on beaker')
         window.state.chemist.beaker.pH--
     } else if (item.id === 'alkalineCup') {
-        console.log('alkalineCup used on beaker')
         window.state.chemist.beaker.pH++
     }
 
@@ -89,13 +74,12 @@ function draw() {
     drawColoredCups()
     drawPHCups()
 }
+
 function initBeaker() {
     setup(beaker, 80, 120)
-    beaker.addEventListener('click', function(e) {
+    beaker.addEventListener('click', function (e) {
         onItemClicked(this)
     })
-
-    console.log('Beaker initialized')
 }
 
 function drawBeaker(canvas) {
@@ -107,28 +91,26 @@ function drawBeaker(canvas) {
     let red = window.state.chemist.beaker.color.red
     let yellow = window.state.chemist.beaker.color.yellow
     let blue = window.state.chemist.beaker.color.blue
-    
+
     ctx.fillStyle = ryb2hex([red, yellow, blue])
     ctx.fillRect(0, canvas.height - (window.state.chemist.beaker.volume / VOLUME_MAX * canvas.height), canvas.width, canvas.height)
 }
 
 function initColoredCups() {
     setup(redCup, 50, 50)
-    redCup.addEventListener('click', function(e) {
+    redCup.addEventListener('click', function (e) {
         onItemClicked(this)
     })
 
     setup(redCup, 50, 50)
-    yellowCup.addEventListener('click', function(e) {
+    yellowCup.addEventListener('click', function (e) {
         onItemClicked(this)
     })
 
     setup(redCup, 50, 50)
-    blueCup.addEventListener('click', function(e) {
+    blueCup.addEventListener('click', function (e) {
         onItemClicked(this)
     })
-
-    console.log('Colored cups initialized')
 }
 
 function drawColoredCups() {
@@ -146,36 +128,31 @@ function drawColoredCup(canvas, colorType = ColorType.UNKNOWN) {
     let red = colorType.ratio.red
     let yellow = colorType.ratio.yellow
     let blue = colorType.ratio.blue
-    
+
     ctx.fillStyle = ryb2hex([red, yellow, blue])
     ctx.fillRect(0, 0, canvas.width, canvas.height)
 }
 
 function initPHCups() {
-    setup(acidCup, 75, 87       )
-    acidCup.addEventListener('click', function(e) {
+    setup(acidCup, 75, 87)
+    acidCup.addEventListener('click', function (e) {
         onItemClicked(this)
     })
 
     setup(alkalineCup, 75, 87)
-    alkalineCup.addEventListener('click', function(e) {
+    alkalineCup.addEventListener('click', function (e) {
         onItemClicked(this)
     })
 }
 
 function drawPHCups() {
-    var acidImage = document.getElementById('acidCupImg')
-    var alkalineImage = document.getElementById('alkalineCupImg')
-    drawPHCup(acidCup, acidImage)
-    drawPHCup(alkalineCup, alkalineImage)
+    drawPHCup(acidCup, $('#acidCupImg').get(0))
+    drawPHCup(alkalineCup, $('#alkalineCupImg').get(0))
 }
 
 function drawPHCup(canvas, img) {
     let ctx = canvas.getContext('2d')
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    //ctx.beginPath()
-    //ctx.fillStyle = color
-    //ctx.fillRect(0, 0, canvas.width, canvas.height)
     ctx.drawImage(img, 0, 0)
 }
 
@@ -184,30 +161,6 @@ function setup(canvas, width, height) {
     canvas.height = height
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`
-}
-
-class ColorType {
-    static UNKNOWN = new ColorType('Unknown', { red: 0, yellow: 0, blue: 0 })
-    // Primary colors
-    static RED = new ColorType('Red', { red: 1, yellow: 0, blue: 0 })
-    static YELLOW = new ColorType('Yellow', { red: 0, yellow: 1, blue: 0 })
-    static BLUE = new ColorType('Blue', { red: 0, yellow: 0, blue: 1 })
-    // Secondary colors
-    static ORANGE = new ColorType('Red', { red: 1, yellow: 1, blue: 0 })
-    static GREEN = new ColorType('Yellow', { red: 0, yellow: 1, blue: 1 })
-    static VIOLET = new ColorType('Blue', { red: 1, yellow: 0, blue: 1 })
-    // Tertiary colors
-    static YELLOW_ORANGE = new ColorType('Red', { red: 1, yellow: 2, blue: 0 })
-    static RED_ORANGE = new ColorType('Yellow', { red: 2, yellow: 1, blue: 0 })
-    static RED_VIOLET = new ColorType('Blue', { red: 2, yellow: 0, blue: 1 })
-    static BLUE_VIOLET = new ColorType('Red', { red: 1, yellow: 0, blue: 2 })
-    static BLUE_GREEN = new ColorType('Yellow', { red: 0, yellow: 1, blue: 2 })
-    static YELLOW_GREEN = new ColorType('Blue', { red: 0, yellow: 2, blue: 1 })
-
-    constructor(name, ratio) {
-        this.name = name
-        this.ratio = ratio
-    }
 }
 
 let isOnIcebox = false
@@ -250,17 +203,12 @@ function drop(ev) {
     }
 }
 
-function redraw() {
-    //$('#test').html(`Test: ${window.state.chemist.beaker.temperature}`)
-}
-
-setInterval(function() {
+setInterval(function () {
     if (isOnIcebox) window.state.chemist.beaker.temperature--
     else if (isOnHotPlate) window.state.chemist.beaker.temperature++
     if (window.state.chemist.beaker.temperature < 10) window.state.chemist.beaker.temperature = 10
     if (window.state.chemist.beaker.temperature > 30) window.state.chemist.beaker.temperature = 30
     sendGameState()
-    redraw()
 }, 1000)
 
 
@@ -279,26 +227,26 @@ setInterval(function() {
 
 
 var MAGIC_COLORS = [
-	[1,     1,     1],
-	[1,     1,     0],
-	[1,     0,     0],
-	[1,     0.5,   0],
-	[0.163, 0.373, 0.6],
-	[0.0,   0.66,  0.2],
-    [0.5,   0.0,   0.5],
-    [0.2,   0.094, 0.0]
+    [1, 1, 1],
+    [1, 1, 0],
+    [1, 0, 0],
+    [1, 0.5, 0],
+    [0.163, 0.373, 0.6],
+    [0.0, 0.66, 0.2],
+    [0.5, 0.0, 0.5],
+    [0.2, 0.094, 0.0]
 ];
 
-function cubicInt(t, A, B){
-	var weight = t * t * (3 - 2 * t);
-	return A + weight * (B - A);
+function cubicInt(t, A, B) {
+    var weight = t * t * (3 - 2 * t);
+    return A + weight * (B - A);
 }
 
 function getR(iR, iY, iB, magic) {
-	magic = magic || MAGIC_COLORS;
-	// red
-	var x0 = cubicInt(iB, magic[0][0], magic[4][0]);
-	var x1 = cubicInt(iB, magic[1][0], magic[5][0]);
+    magic = magic || MAGIC_COLORS;
+    // red
+    var x0 = cubicInt(iB, magic[0][0], magic[4][0]);
+    var x1 = cubicInt(iB, magic[1][0], magic[5][0]);
     var x2 = cubicInt(iB, magic[2][0], magic[6][0]);
     var x3 = cubicInt(iB, magic[3][0], magic[7][0]);
     var y0 = cubicInt(iY, x0, x1);
@@ -307,7 +255,7 @@ function getR(iR, iY, iB, magic) {
 }
 
 function getG(iR, iY, iB, magic) {
-	magic = magic || MAGIC_COLORS;
+    magic = magic || MAGIC_COLORS;
     // green
     var x0 = cubicInt(iB, magic[0][1], magic[4][1]);
     var x1 = cubicInt(iB, magic[1][1], magic[5][1]);
@@ -319,9 +267,9 @@ function getG(iR, iY, iB, magic) {
 }
 
 function getB(iR, iY, iB, magic) {
-	magic = magic || MAGIC_COLORS;
-	// blue
-	var x0 = cubicInt(iB, magic[0][2], magic[4][2]);
+    magic = magic || MAGIC_COLORS;
+    // blue
+    var x0 = cubicInt(iB, magic[0][2], magic[4][2]);
     var x1 = cubicInt(iB, magic[1][2], magic[5][2]);
     var x2 = cubicInt(iB, magic[2][2], magic[6][2]);
     var x3 = cubicInt(iB, magic[3][2], magic[7][2]);
@@ -331,7 +279,7 @@ function getB(iR, iY, iB, magic) {
 }
 
 function ryb2rgb(color, limit, magic) {
-	limit = limit || 255;
+    limit = limit || 255;
     magic = magic || MAGIC_COLORS;
     var R = color[0] / limit;
     var Y = color[1] / limit;
@@ -340,25 +288,25 @@ function ryb2rgb(color, limit, magic) {
     var G1 = getG(R, Y, B, magic);
     var B1 = getB(R, Y, B, magic);
     return [
-		Math.ceil(R1 * limit),
-		Math.ceil(G1 * limit),
-		Math.ceil(B1 * limit)
-	];
+        Math.ceil(R1 * limit),
+        Math.ceil(G1 * limit),
+        Math.ceil(B1 * limit)
+    ];
 }
 
 function ryb2hex(drops) {
-	let n = drops[0] + drops[1] + drops[2]
+    let n = drops[0] + drops[1] + drops[2]
     let d0 = drops[0] / n * 0xff
     let d1 = drops[1] / n * 0xff
     let d2 = drops[2] / n * 0xff
     if (n == 0) d0 = d1 = d2 = 0
-	let col = ryb2rgb([d0, d1, d2])
+    let col = ryb2rgb([d0, d1, d2])
     let r = col[0].toString(16)
     let g = col[1].toString(16)
     let b = col[2].toString(16)
     return '#' + (
-		(r.length == 1 ? '0' + r : r) +
-		(g.length == 1 ? '0' + g : g) +
-		(b.length == 1 ? '0' + b : b)
-	)
+        (r.length == 1 ? '0' + r : r) +
+        (g.length == 1 ? '0' + g : g) +
+        (b.length == 1 ? '0' + b : b)
+    )
 }

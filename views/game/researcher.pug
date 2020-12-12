@@ -4,7 +4,7 @@ block game-styles
     link(rel='stylesheet', href='/css/game/researcher.css')
 
 block game-content
-    img(id='title', src='/images/researcher-title.png')
+    img(id='title', src='/images/title-researcher.png', alt='Researcher Title')
 
     div(class='d-block text-center')
         h3(id='info', class='text-center')
@@ -44,9 +44,7 @@ block game-content
             div(id='blue-violet', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Violet</em><br>2:0:1')
             div(id='blue-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Blue-Green</em><br>0:1:2')
             div(id='yellow-green', class='color-palette-col', data-toggle='tooltip', data-placement='top', data-html='true', title='<em>Yellow-Green</em><br>0:2:1')
-            
-    //button(id='read-researcher', class='action-button') Read Researcher
-    //button(id='read-chemist', class='action-button') Read Chemist
+    
     button(id='report-button' class='action-button', data-toggle='modal', data-target='#reportModal') Lab Report
 
     div(id='reportModal', class='modal fade', tabindex='-1')

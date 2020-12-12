@@ -4,11 +4,11 @@ block game-styles
     link(rel='stylesheet', href='/css/game/chemist.css')
 
 block game-content
-    img(id='title', src='/images/chemist-title.png')
+    img(id='title', src='/images/title-chemist.png', alt='Chemist Title')
 
     div(id='tools', class='col')
         div(id='tools-title-container', class='mx-auto')
-            img(src='/images/Tools.png', alt="Tools Title")  
+            img(src='/images/text-tools.png', alt='Tools Title')  
         div(class='row no-gutters')
             div(class='col')
                 div(id='color-cups-container', class='mx-auto')
@@ -36,13 +36,13 @@ block game-content
                         div(class='col')
                             div(id='acid-cup-container', class='mx-auto')
                                 canvas(id='acidCup', class='object interactive')
-                                img(id='acidCupImg', src='/images/Acid-Beaker.png' class='hidden')
+                                img(id='acidCupImg', class='hidden', src='/images/beaker-acid.png', alt='Acid Beaker')
                             div(id='acid-label-container', class='mx-auto')
                                 h6(id='acidCup-label') Acid Beaker
                         div(class='col')
                             div(id='alkaline-cup-container', class='mx-auto')
                                 canvas(id='alkalineCup', class='object interactive')
-                                img(id='alkalineCupImg', src='/images/Base-Beaker.png' class='hidden')
+                                img(id='alkalineCupImg', class='hidden', src='/images/beaker-alkaline.png', alt='Alkaline Beaker')
                             div(id='alkalineCup-label-container', class='mx-auto')
                                 h6(id='alkalineCup-label') Base Beaker
                 div(id='phTools-title-container' class='mx-auto')

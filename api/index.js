@@ -15,7 +15,7 @@ const PlayerRole = {
 }
 
 const stateTemplate = {
-    time: null, // Seconds
+    time: null,
     researcher: {
         beaker: null
     },
@@ -25,14 +25,14 @@ const stateTemplate = {
 }
 
 const beakerTemplate = {
-    volume: null, // Liters
+    volume: null,
     color: {
         red: null,
         yellow: null,
         blue: null
     },
-    temperature: null, // Celsius
-    pH: null // Ranges from 0 to 14
+    temperature: null,
+    pH: null
 }
 
 // Socket connections
@@ -130,19 +130,6 @@ const routes = (app) => {
             title: 'Game'
         })
     })
-    
-    // Set up the sandbox handler if we're in development mode
-    if (app.get('env') === 'development') {
-        // Handler for the sandbox page
-        app.get('/sandbox', (req, res) => {
-            // Render the sandbox page
-            res.render('sandbox', {
-                title: 'Sandbox'
-            })
-        })
-
-        log('Using sandbox mode')
-    }
 
     // Handler that catches anything that couldn't be handled
     app.use((req, res) => {
@@ -184,13 +171,13 @@ const sockets = (io) => {
         socket.on('vc-init', () => {
             for (let id in clients) {
                 if (id === socket.id) continue
-                console.log(`${id} sending vc-init-receive to ${socket.id}`)
+                log(`${id} sending vc-init-receive to ${socket.id}`)
                 clients[id].emit('vc-init-receive', socket.id)
             }
         })
 
         socket.on('vc-init-send', (id) => {
-            console.log(`${socket.id} sending vc-init-send to ${id}`)
+            log(`${socket.id} sending vc-init-send to ${id}`)
             clients[id].emit('vc-init-send', socket.id)
         })
 
@@ -210,13 +197,13 @@ const sockets = (io) => {
 }
 
 function onSubmitReport(io, socket, game, report) {
-    console.log(`Game ${game} report submitted`)
-    console.log(report)
+    log(`Game ${game} report submitted`)
+    log(report)
     games[game].report = report
 }
 
 function onPlayerFinished(io, socket, game, player) {
-    console.log(`Player ${player} finished game ${game}`)
+    log(`Player ${player} finished game ${game}`)
     games[game].players[player].finished = true
     if (checkAllPlayersFinished(game)) {
         if (checkBeakerMatches(game)) {
@@ -246,8 +233,6 @@ function updateGameState(io, socket, game, state) {
 }
 
 function checkBeakerMatches(game) {
-    console.log(games[game].state.researcher.beaker)
-    console.log(games[game].report)
     if (games[game].state.researcher.beaker.volume !== games[game].report.volume) return false
     if (games[game].state.researcher.beaker.color.red !== games[game].report.ratio.red) return false
     if (games[game].state.researcher.beaker.color.yellow !== games[game].report.ratio.yellow) return false
@@ -258,13 +243,13 @@ function checkBeakerMatches(game) {
 }
 
 function connect(io, socket) {
-    console.log(`Client ${socket.id} connected`)
+    log(`Client ${socket.id} connected`)
 
     clients[socket.id] = socket
 }
 
 function disconnect(io, socket) {
-    console.log(`Client ${socket.id} disconnected`)
+    log(`Client ${socket.id} disconnected`)
     
     delete clients[socket.id]
     
@@ -535,9 +520,7 @@ function getRandomBoolean() {
 }
 
 function log(str) {
-    if (DEBUG) {
-        console.log(str)
-    }
+    if (DEBUG) console.log(str)
 }
 
 module.exports = {

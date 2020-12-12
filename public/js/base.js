@@ -1,4 +1,5 @@
 const DEBUG = false
+const player = $.cookie('player')
 
 const GameStatus = {
     WAITING: 0,
@@ -14,22 +15,23 @@ const PlayerRole = {
     RESEARCHER: 2
 }
 
-const player = $.cookie('player')
-
-$('#back').on('click', function() {
-    history.back()
+// Global handler for when a button to the home-page is clicked
+$('#home').on('click', function () {
+    location.href = '/' // Go to home-page
 })
 
-$('#home').on('click', function() {
-    location.href = '/'
+// Global handler for when a back button is clicked
+$('#back').on('click', function () {
+    history.back() // Return to previous page
 })
 
-$(function() {
+// Logging utility
+function log(str) {
+    if (DEBUG) console.log(str)
+}
+
+// Execute once page is fully loaded
+$(function () {
+    // Hide loading-spinner
     $('#spinner').hide()
 })
-
-function log(str) {
-    if (DEBUG) {
-        console.log(str)
-    }
-}

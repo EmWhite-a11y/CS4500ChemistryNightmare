@@ -1,10 +1,7 @@
 extends base
 
-block styles
-    link(rel='stylesheet', href='/css/rules.css')
-
 block content
-    img(id='title', src='/images/rules-title.png')
+    img(id='title', src='/images/title-rules.png', alt='Rules Title')
     
     p
         | The goal of the game is to recreate the filled beaker. Click on a tool and then a beaker. Just click your way to victory!
@@ -41,6 +38,3 @@ block content
             li Submit your beaker when the Researcher submits their lab report
     
     button(id='back', class='action-button') Back
-
-block scripts
-    script(src='/js/rules.js')
