@@ -104,7 +104,6 @@ function init() {
 
 function draw() {
     drawBeakers()
-    drawTools()
 }
 function initBeakers() {
     setup(researcherBeaker, 80, 120)
