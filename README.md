@@ -32,7 +32,8 @@ development mode on port 5000.
 5. Have both players "turn-in".
 6. Be presented with a game over screen saying that both beaker's match.
 7. Return to the home page.
-Note: For best experience, use 1300×800 screen resolution
+
+Note: For best experience, use 1300×800 screen resolution.
 
 ## Issues
 - Voice chat doesn't always connect
