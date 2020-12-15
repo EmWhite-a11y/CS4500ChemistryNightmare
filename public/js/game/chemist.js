@@ -231,4 +231,5 @@ function disableClickableItems() {
     document.getElementById('acidCup').style.pointerEvents = 'none';
     document.getElementById('alkalineCup').style.pointerEvents = 'none';
     document.getElementById('beaker').style.pointerEvents = 'none';
+    document.getElementById('dump').style.pointerEvents = 'none';
 }
