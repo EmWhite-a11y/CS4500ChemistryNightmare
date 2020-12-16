@@ -19,7 +19,7 @@ Our interaction mechanic is a two-click process. The first item clicked will int
 From the root directory of
 the project, run the command:
 ```
-npm run start:dev
+npm run start
 ```
 This runs the application in
 development mode on port 5000.
