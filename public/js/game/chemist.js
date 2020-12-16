@@ -19,6 +19,7 @@ $('#dump').on('click', function () {
 $('#submit').on('click', function () {
     socket.emit('player-finished', game, player)
     $('#submit').hide()
+    disableClickableItems()
 })
 
 // Initializes game state
@@ -221,3 +222,14 @@ setInterval(function () {
     if (window.state.chemist.beaker.temperature > 30) window.state.chemist.beaker.temperature = 30
     sendGameState()
 }, 1000)
+
+// Disables all clickable objects when Chemist clicks turn-in button
+function disableClickableItems() {
+    document.getElementById('redCup').style.pointerEvents = 'none';
+    document.getElementById('yellowCup').style.pointerEvents = 'none';
+    document.getElementById('blueCup').style.pointerEvents = 'none';
+    document.getElementById('acidCup').style.pointerEvents = 'none';
+    document.getElementById('alkalineCup').style.pointerEvents = 'none';
+    document.getElementById('beaker').style.pointerEvents = 'none';
+    document.getElementById('dump').style.pointerEvents = 'none';
+}

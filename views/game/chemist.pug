@@ -5,12 +5,13 @@ block game-styles
 
 block game-content
     img(id='title', src='/images/title-chemist.png', alt='Chemist Title')
-
+    //tools
     div(id='tools', class='col')
         div(id='tools-title-container', class='mx-auto')
             img(src='/images/text-tools.png', alt='Tools Title')  
         div(class='row no-gutters')
             div(class='col')
+                //Color cups tools
                 div(id='color-cups-container', class='mx-auto')
                     div(class='row no-gutters')
                         div(class='col')
@@ -31,6 +32,7 @@ block game-content
                 div(id='colorTools-title-container' class='mx-auto')
                     h4(id='colorTools', class='text-align-center') Color Controls
             div(class='col')
+                // pH Beakers
                 div(id='ph-beakers-container')
                     div(class='row no-gutters')
                         div(class='col')
@@ -48,6 +50,7 @@ block game-content
                 div(id='phTools-title-container' class='mx-auto')
                     h4(id='phTools') pH Controls
             div(class='col')
+                // Temp Tools
                 div(id='temp-ctrl-container', class='mx-auto')
                     div(class='row no-gutters')
                         div(class='col')
@@ -64,9 +67,11 @@ block game-content
                     h4(id='tempCtrl') Temperature Controls
 
     div(class='col')
+        // Beaker
         div(id='beaker-container', class='mx-auto', ondrop='drop(event)', ondragover='allowDrop(event)')
             canvas(id='beaker', class='object interactive', draggable='true')
     div(class='row no-gutter')
+        // Submit and Dump button
         div(id='btn-container', class='mx-auto')
         div(class='col')
             button(id='submit', class='action-button') Turn-In
