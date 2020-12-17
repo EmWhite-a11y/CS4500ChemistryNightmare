@@ -1,6 +1,5 @@
 @import url('http://fonts.cdnfonts.com/css/karmatic-arcade');
 
-
 .object {
     display: hidden;
 }
@@ -20,8 +19,6 @@ canvas {
 
 h6 {
     font-family: 'Karmatic Arcade', sans-serif;
-    /**font-style: italic, bold;**/
-
 }
 
 #temp-label-container,
