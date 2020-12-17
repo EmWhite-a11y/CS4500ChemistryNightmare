@@ -1,0 +1,27 @@
+{
+  "name": "chemistry-nightmare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "start:dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-session": "^1.4.0",
+    "express": "^4.17.1",
+    "httpolyglot": "^0.1.2",
+    "pug": "^3.0.0",
+    "simple-peer": "^9.9.3",
+    "socket.io": "^3.0.3",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6",
+    "shelljs": "^0.8.4"
+  }
+}

@@ -1,0 +1,8 @@
+.modal-content {
+    background-color: transparent !important;
+}
+
+.modal-content,
+.modal-body {
+    border: none !important;
+}

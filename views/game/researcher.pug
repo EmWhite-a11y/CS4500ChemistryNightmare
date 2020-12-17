@@ -1,0 +1,93 @@
+extends base
+
+block game-styles
+    link(rel='stylesheet' href='/css/game/researcher.css')
+
+block game-content
+    img(id='title', src='/images/title-researcher.png', alt='Researcher Title')
+
+    div(class='d-block text-center')
+        h3(id='info' class='text-center')
+
+    div(class='row no-gutters')
+        div(class='col')
+            div(id='researcher-beaker-container' class='mx-auto')
+                canvas(id='researcherBeaker' class='object interactive')
+            div(id='beaker-label-container' class='mx-auto')
+                h6(id='beaker-label') Researcher Beaker
+        div(class='col')
+            div(id='chemist-beaker-container' class='mx-auto')
+                canvas(id='chemistBeaker' class='object interactive')
+            div(id='beaker-label-container' class='mx-auto')
+                h6(id='beaker-label') Chemist Beaker 
+    div(class='row no-gutters')
+        div(class='col')
+            div(id='ruler-container' class='mx-auto')
+                img(id='ruler' src='/images/ruler.png' class='object interactive')
+            div(id='volume-label-container' class='mx-auto')
+                h6(id='volume-label') Volume
+        div(class='col')
+            div(id='thermometer-container' class='mx-auto')
+                img(id='thermometer' src='/images/thermometer.png' class='object interactive')
+            div(id='temp-label-container' class='mx-auto')
+                h6(id='temp-label') Temperature 
+        div(class='col')
+            div(id='ph-meter-container' class='mx-auto')
+                img(id='phMeter' src='/images/phmeter.png' class='object interactive')
+            div(id='ph-label-container' class='mx-auto')
+                h6(id='ph-label') PH 
+
+    div(id='color-palette-container')
+        div(class='color-palette-row')
+            div(id='red' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Red</em><br>1:0:0')
+            div(id='yellow' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Yellow</em><br>0:1:0')
+            div(id='blue' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Blue</em><br>0:0:1')
+        div(class='color-palette-row')
+            div(id='orange' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Orange</em><br>1:1:0')
+            div(id='green' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Green</em><br>0:1:1')
+            div(id='violet' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Violet</em><br>1:0:1')
+        div(class='color-palette-row')
+            div(id='yellow-orange' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Yellow-Orange</em><br>1:2:0')
+            div(id='red-orange' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Red-Orange</em><br>2:1:0')
+            div(id='red-violet' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Red-Violet</em><br>1:0:2')
+        div(class='color-palette-row')
+            div(id='blue-violet' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Blue-Violet</em><br>2:0:1')
+            div(id='blue-green' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Blue-Green</em><br>0:1:2')
+            div(id='yellow-green' class='color-palette-col' data-toggle='tooltip' data-placement='top' data-html='true' title='<em>Yellow-Green</em><br>0:2:1')
+    div(id='palette-label-container' class='mx-auto')
+        h6(id='palette-label') Color Palette
+
+    button(id='report-button' class='action-button' data-toggle='modal' data-target='#reportModal') Lab Report
+
+    div(id='reportModal' class='modal fade' tabindex='-1')
+        div(class='modal-dialog modal-dialog-centered')
+            div(class='modal-content report p-3')
+                div(class='modal-title')
+                    h1(class='text-dark text-center') Lab Report
+                div(class='modal-body text-dark')
+                    div(class='form-row')
+                        div(class='form-group col-12')
+                            label(class='col-form-label') Volume
+                            input(id='report-volume' class='form-control')
+                        div(class='form-group col-4')
+                            label(class='col-form-label') Red Ratio
+                            input(id='report-red-ratio' class='form-control')
+                        div(class='form-group col-4')
+                            label(class='node col-form-label') Yellow Ratio
+                            input(id='report-yellow-ratio' class='form-control')
+                        div(class='form-group col-4')
+                            label(class='col-form-label') Blue Ratio
+                            input(id='report-blue-ratio' class='form-control')
+                    div(class='form-row')
+                        div(class='form-group col-6')
+                            label(class='col-form-label') Temperature
+                            input(id='report-temperature' class='form-control')
+                        div(class='form-group col-6')
+                            label(class='col-form-label') pH
+                            input(id='report-ph' class='form-control')
+                div(class='modal-footer')
+                    button(id='report-close' class='action-button dark' data-dismiss='modal') Close
+                    button(id='report-submit' class='action-button dark' data-dismiss='modal') Turn-In
+
+block game-scripts
+    script(src='/js/game/researcher.js')

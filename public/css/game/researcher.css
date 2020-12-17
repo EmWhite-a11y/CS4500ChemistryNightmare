@@ -1,0 +1,164 @@
+@import url('http://fonts.cdnfonts.com/css/karmatic-arcade');
+
+.object {
+    display: hidden;
+}
+
+.interactive {
+    cursor: pointer;
+}
+
+canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: -o-crisp-edges;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+}
+
+h6 {
+    font-family: 'Karmatic Arcade', sans-serif;
+}
+
+#temp-label-container,
+#volume-label-container,
+#ph-label-container,
+#beaker-label-container,
+#palette-label-container {
+    text-align: center;
+    position: relative;
+}
+
+#ruler-container,
+#thermometer-container,
+#ph-meter-container {
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    position: relative;
+}
+
+#ruler {
+    width: 25px;
+    height: 100px;
+    min-height: 100px;
+    min-width: 25px;
+    border: 2px solid #333;
+}
+
+#phMeter {
+    width: 60px;
+    height: 100px;
+    min-height: 100px;
+    min-width: 60px;
+}
+
+#thermometer {
+    width: 70px;
+    height: 100px;
+    min-height: 100px;
+    min-width: 70px;
+}
+
+#researcherBeaker,
+#chemistBeaker {
+    position: absolute;
+    display: block;
+    width: 80px;
+    height: 120px;
+    bottom: 0;
+    left: 50%;
+    margin-left: calc(-80px / 2);
+    border: 2px solid #333;
+    border-radius: 4px 4px 12px 12px;
+    box-shadow: 0 -3px 8px -1px #111 inset;
+}
+
+#researcher-beaker-container,
+#chemist-beaker-container {
+    text-align: center;
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+
+.modal-content {
+    background-color: transparent !important;
+}
+
+.modal-content.report {
+    background-color: #fdfd96 !important;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 -2px 8px -4px #111 inset;
+}
+
+.modal-content,
+.modal-body,
+.modal-footer {
+    border: none !important;
+}
+
+input,
+textarea {
+    color: black !important;
+}
+
+input:hover,
+input:active,
+input:focus,
+input:visited {
+    color: black !important;
+    border-color: black !important;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+
+#color-palette-container {
+    display: block;
+    width: 100px;
+    margin: 10px auto;
+    padding: 5px;
+    background-color: black;
+}
+
+.color-palette-row {
+    display: flex;
+    height: 30px;
+}
+
+.color-palette-col {
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.tooltip-inner {
+    background-color: white !important;
+    color: black !important;
+}
+
+.bs-tooltip-top .arrow::before,
+.bs-tooltip-auto[x-placement^="top"] .arrow::before {
+    border-top-color: white !important;
+}
+
+.bs-tooltip-right .arrow::before,
+.bs-tooltip-auto[x-placement^="right"] .arrow::before {
+    border-right-color: white !important;
+}
+
+
+.bs-tooltip-bottom .arrow::before,
+.bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+    border-bottom-color: white !important;
+}
+
+
+.bs-tooltip-left .arrow::before,
+.bs-tooltip-auto[x-placement^="left"] .arrow::before {
+    border-left-color: white !important;
+}

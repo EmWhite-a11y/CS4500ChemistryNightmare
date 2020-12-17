@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+:root {
+    --color1: #68d490;
+    --color2: #33b853;
+    --color3: #217841;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Roboto", monospace, sans-serif;
+    background-color: aquamarine;
+}
+
+#title {
+    display: block;
+    margin: 1rem auto;
+}
+
+.action-button {
+    display: block;
+    background-color: transparent;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid white;
+    margin: 1em auto;
+    width: 200px;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    font-weight: 300;
+    color: white;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.action-button:hover {
+    color: black;
+    background-color: white;
+}
+
+.action-button.dark:hover {
+    color: white;
+    background-color: black;
+}
+
+.action-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.action-button:hover,
+.action-button:active,
+.action-button:visited {
+    border-radius: 0.12em;
+    color: var(--color2);
+    background-color: white;
+    outline-color: var(--color2);
+}
+
+.action-button.dark:hover,
+.action-button.dark:active,
+.action-button.dark:visited {
+    border-radius: 0.12em;
+    color: white;
+    background-color: black;
+    outline-color: white;
+}
+
+.action-button.dark {
+    display: block;
+    background-color: transparent;
+    padding: 0.35em 1.2em;
+    border: 0.1em solid black;
+    margin: 1em auto;
+    width: 200px;
+    border-radius: 0.12em;
+    box-sizing: border-box;
+    font-weight: 300;
+    color: black;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.background {
+    background: linear-gradient(270deg, var(--color1), var(--color2), var(--color3)) 0% 0% / 300% 300%;
+    -webkit-animation: BackgroundAnimation 30s ease infinite;
+    -moz-animation: BackgroundAnimation 30s ease infinite;
+    animation: BackgroundAnimation 30s ease infinite;
+}
+
+@-webkit-keyframes BackgroundAnimation {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@-moz-keyframes BackgroundAnimation {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@keyframes BackgroundAnimation {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+#spinner {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 999;
+    cursor: pointer;
+}
